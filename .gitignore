@@ -1,2 +1,7 @@
 .DS_Store
 EHC
+*.core*
+*.hi
+*.html
+*.js
+*.mjs
