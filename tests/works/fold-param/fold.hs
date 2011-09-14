@@ -1,7 +1,7 @@
 main :: IO ()
 main = do
   let answ = fldToN (f 3) 10
-  return ()
+  putStrLn $ show answ
 
 f :: Int -> Int -> Int -> Int
 f n x xs = n + x + xs
