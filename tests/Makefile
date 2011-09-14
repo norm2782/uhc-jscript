@@ -13,5 +13,10 @@ default: $(PROJECT).js
 clean:
 	rm *.core* *.hi *.js *.html *.mjs
 
+strip:
+	find . -iname "*.core*" | xargs sed -ie 's/$$UHC$$\.Base$$\.//g';
+
+.PHONY : clean strip tst
+
 tst:
 	echo $(patsubst %.hs, %, $(PROJECT))
