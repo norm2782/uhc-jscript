@@ -14,7 +14,11 @@ clean:
 	rm *.core* *.hi *.js *.html *.mjs
 
 strip:
-	find . -iname "*.core*" | xargs sed -ie 's/$$UHC$$\.Base$$\.//g';
+	find . -iname "*.core*" | xargs gsed -i 's/$$UHC$$\.Base$$\.//g';
+	find . -iname "*.core*" | xargs gsed -i 's/UHC\.Base\.//g';
+	find . -iname "*.core*" | xargs gsed -i 's/$$UHC$$\.Run$$\.//g';
+	find . -iname "*.core*" | xargs gsed -i 's/$$UHC$$\.OldIO$$\.//g';
+	perl -pi -w -e 's/(_\d+)*_\$@\d[A-Z]+_\$@(\d+(_\d+)*)//g;' *.core*
 
 .PHONY : clean strip tst
 
