@@ -11,7 +11,7 @@ default: $(PROJECT).js
 	$(UHC) $< $(FLAGS)
 
 clean:
-	rm *.core* *.hi *.js *.html *.mjs
+	rm $(PROJECT).core* $(PROJECT).full.core $(PROJECT).hi $(PROJECT).js $(PROJECT).html $(PROJECT).mjs
 
 strip:
 	find . -iname "*.core*" | xargs gsed -i 's/$$UHC$$\.Base$$\.//g';
@@ -23,4 +23,4 @@ strip:
 .PHONY : clean strip tst
 
 tst:
-	echo $(patsubst %.hs, %, $(PROJECT))
+	echo $(patsubst %.hs, %, $(PROJECTh
