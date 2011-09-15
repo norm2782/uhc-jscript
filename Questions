@@ -5,4 +5,46 @@
 %%]]
 
 blocks exist? Aren't they redundant?
+
+
 - What comes first, fold.full.core or fold.core-1-initial?
+
+
+- Constructors (e.g. cons and nil) have tags. Do they represent the ctr index?
+    function cons(x,y) { return [0,x,y]; }
+    var nil = [1];
+
+
+- Does UHC support the OverloadedStrings extension?
+
+type JSString = PackedString
+stringToJSString :: String -> JSString
+jsStringToString :: JSString -> String
+
+
+- From blog post:
+
+"There is choice whether to put document in the IO monad or not, depending
+whether this global object itself will ever be assigned a new value or not. Not
+being a Javascript DOM wizard wrapping in IO seems to be the safest bet."
+
+If we had the guarantee that the document object cannot be reassigned, would we
+still be confined to IO?
+
+Some experimentation with the WebKit inspector suggests that document cannot be
+reassigned. However, its child nodes can of course be manipulated.
+
+
+- Are there known issues? Especially related to the JS shooting off into an
+  endless loop?
+
+
+- Is there a way to view the JS transformation passes as well? Or is that just
+  one big pass?
+
+
+- Where is the Haskell AST converted into the JS AST?
+Part of this seems to be done in ToJScript.ag, but things like Expr_Str are not
+part of the JS types... Ah, it is in fact done there, but the JS types are
+being prefixed with J.Expr_. Is this some dark AG magic, or something that gets
+preprocessed?
