@@ -22,8 +22,8 @@ foreign import jscript "%1.toLocaleString" toLocaleString :: JSArray x -> JSStri
 -- number of arguments? How do we deal with non-arrays being passed? Do we need
 -- to specified a ToJS constraint on those? Or can we let JS figure out what to
 -- do?
-foreign import jscript "%1.conat(%*)" concat  :: JSArray x -> JSArray x -> JSArray x
-foreign import jscript "%1.conat(%*)" concat' :: JSNArgs (JSArray x) -> JSArray x
+foreign import jscript "%1.concat(%*)" concat  :: JSArray x -> JSArray x -> JSArray x
+foreign import jscript "%1.concat(%*)" concat' :: JSArray x -> JSNArgs (JSArray x) -> JSArray x
 
 -- TODO: The ECMA standard specifies that the separator argument is optional
 -- and a comma will be used if no separator is specified. How do we want to
@@ -33,7 +33,7 @@ foreign import jscript "%1.conat(%*)" concat' :: JSNArgs (JSArray x) -> JSArray 
 -- alternative imports. It'd be easiest for functions with a small number of
 -- optional arguments. Funs with more optional arguments still require some
 -- thought though.
-foreign import jscript "%1.join(%*)" join  :: JSArray x -> JSString
+foreign import jscript "%1.join" join  :: JSArray x -> JSString
 foreign import jscript "%1.join(%*)" join' :: JSArray x -> JSString -> JSString
 
 foreign import jscript "%1.pop" pop :: JSArray x -> x
@@ -51,9 +51,9 @@ foreign import jscript "%1.shift" shift :: JSArray x -> x
 
 foreign import jscript "%1.slice(%*)" slice :: JSArray x -> Int -> Int -> JSArray x
 
--- TODO: The sort function is optioanl
-foreign import jscript "%1.sort(%*)" sort :: JSArray x -> JSArray x
+foreign import jscript "%1.sort" sort :: JSArray x -> JSArray x
 
+-- TODO: The sort function is optioanl
 -- TODO: Can we pass a function in this way? Or do we need to peek at the C FFI for wrapper ideas?
 foreign import jscript "%1.sort(%*)" sort' :: JSArray x -> (x -> x -> Int) -> JSArray x
 
