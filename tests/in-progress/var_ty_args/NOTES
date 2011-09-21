@@ -1,0 +1,9 @@
+Type information seems to be lost in the conversion from HS to JS? An Int and a
+String should produce separate messages, but both are seen as an object, which
+should produce yet another message!
+
+
+Ah, this seems to be due to the fact that the myVar from the HS world is
+encapsulated by a JS object. When writing JS functions, we apparently
+explicitly need to ask for the value? This seems rather strange to me. How will
+we then interface with existing libraries?

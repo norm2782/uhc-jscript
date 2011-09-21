@@ -5,4 +5,4 @@ main = do
   putStrLn $ show res
 
 
-foreign import jscript "foldjs" foldjs :: (a -> b -> b) -> b -> [a] -> b
+foreign import jscript "foldjs(%*)" foldjs :: (a -> b -> b) -> b -> [a] -> b
