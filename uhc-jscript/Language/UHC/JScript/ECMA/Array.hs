@@ -14,6 +14,7 @@ import UHC.Array
 
 type JSArray x = BoxArray x
 
+
 foreign import jscript "%1.length" lengthJSArray :: JSArray x -> Int
 foreign import jscript "%1.toString" toString :: JSArray x -> JSString
 foreign import jscript "%1.toLocaleString" toLocaleString :: JSArray x -> JSString
@@ -23,8 +24,10 @@ foreign import jscript "%1.toLocaleString" toLocaleString :: JSArray x -> JSStri
 -- to specified a ToJS constraint on those? Or can we let JS figure out what to
 -- do?
 foreign import jscript "%1.concat(%*)" concat  :: JSArray x -> JSArray x -> JSArray x
-foreign import jscript "%1.concat(%*)" concat' :: JSArray x -> JSNArgs (JSArray x) -> JSArray x
+foreign import jscript "%1.concat(%[2])" concat' :: JSArray x -> [JSArray x] -> JSArray x
 
+foo = concat' arr1 (JSNArgs [arr2, arr3, arr4])
+foo = concat' arr1 [arr2, ]
 -- TODO: The ECMA standard specifies that the separator argument is optional
 -- and a comma will be used if no separator is specified. How do we want to
 -- model optional arguments? Do we want to make separate imports, each with
@@ -36,6 +39,8 @@ foreign import jscript "%1.concat(%*)" concat' :: JSArray x -> JSNArgs (JSArray 
 foreign import jscript "%1.join" join  :: JSArray x -> JSString
 foreign import jscript "%1.join(%*)" join' :: JSArray x -> JSString -> JSString
 
+-- TODO: Do we want this to be in IO? We're mutating the array here...
+-- head/tail teruggeven in tupletje, in IO
 foreign import jscript "%1.pop" pop :: JSArray x -> x
 
 -- TODO: Again we are stuck with the n-argument problem
@@ -55,6 +60,7 @@ foreign import jscript "%1.sort" sort :: JSArray x -> JSArray x
 
 -- TODO: The sort function is optioanl
 -- TODO: Can we pass a function in this way? Or do we need to peek at the C FFI for wrapper ideas?
+-- TODO: Again, do we want to be in IO? The callback could be anything, technically.
 foreign import jscript "%1.sort(%*)" sort' :: JSArray x -> (x -> x -> Int) -> JSArray x
 
 -- TODO: Yet again, the n-argument problem.

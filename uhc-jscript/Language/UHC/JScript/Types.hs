@@ -9,6 +9,7 @@ class ToJS a where
 class FromJS a where
   type FromRes a
   fromJS :: a -> FromRes a
+  -- Werkt niet in UHC, multiparam tyclasses wel
 
 -- | The JSNArgs acts as a wrapper for specifying arguments to an imported JS
 -- function in case an arbitrary number of arguments can be provided.
