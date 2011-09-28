@@ -44,6 +44,7 @@ foreign import jscript "acceptsNArgs(%[*])"
 
 -- This solution isn't exactly pretty: we're still hardcoding the number of
 -- arguments the JS function is given. The difference is that on the JS side,
--- the overloading happens nicely.
+-- the overloading happens nicely. Also, it's the way one would expect an FFI
+-- import to be defined; there are no weird n-argument conventions.
 foreign import jscript "acceptsNArgs(%*)"
   accepts3Args :: Int -> Int -> Int -> IO ()
