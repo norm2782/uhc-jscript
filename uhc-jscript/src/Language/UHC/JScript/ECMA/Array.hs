@@ -1,9 +1,10 @@
 module Language.UHC.JScript.ECMA.Array where
 
+import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Types
 
 import UHC.Array
-import UHC.Base
+import UHC.Base as B
 import UHC.BoxArray
 
 type JSArray x = BoxArray x
@@ -39,8 +40,8 @@ foreign import jscript "%1.concat(%*)"
 -- alternative imports. It'd be easiest for functions with a small number of
 -- optional arguments. Funs with more optional arguments still require some
 -- thought though.
-{- foreign import jscript "%1.join" join  :: JSArray x -> JSString-}
-{- foreign import jscript "%1.join(%*)" join' :: JSArray x -> JSString -> JSString-}
+foreign import jscript "%1.join" join  :: JSArray x -> JSString
+foreign import jscript "%1.join(%*)" join' :: JSArray x -> JSString -> JSString
 
 -- TODO: Do we want this to be in IO? We're mutating the array here...
 -- head/tail teruggeven in tupletje, in IO
@@ -184,7 +185,7 @@ foreign import prim "primWriteArray"
 
 listToJSArray :: [a] -> JSArray a
 listToJSArray [] = error "Cannot convert empty list"
-listToJSArray xs = snd $ foldr f (0, primNewArray (length xs) (head xs)) xs
+listToJSArray xs = snd $ foldr f (0, primNewArray (B.length xs) (head xs)) xs
   where f x (n, arr) = (n+1, seq (primWriteArray arr n x) arr)
 
 indexJSArray :: JSArray x -> Int -> x
