@@ -28,10 +28,10 @@ foreign import jscript "%1.charAt(%2)"
 foreign import jscript "%1.charCodeAt(%2)"
   charCodeAt :: JSString -> Int -> Int
 
-foreign import jscript "%1.concat(%2)"
+foreign import jscript "%1.concat(%*)"
   concat :: JSString -> JSString -> JSString
 
-foreign import jscript "%1.concat(%2)"
+foreign import jscript "%1.concat(%*)"
   concat2 :: JSString -> JSString -> JSString -> JSString
 -- etc.
 
