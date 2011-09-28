@@ -1,11 +1,4 @@
-module Language.UHC.JScript.ECMA.Array
-  ( JSArray
-  , jsArrayToArray
-
-  , lengthJSArray
-  , indexJSArray
-  )
-  where
+module Language.UHC.JScript.ECMA.Array where
 
 import Language.UHC.JScript.Types
 

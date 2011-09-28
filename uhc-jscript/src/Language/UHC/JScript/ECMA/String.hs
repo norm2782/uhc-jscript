@@ -1,10 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module Language.UHC.JScript.ECMA.String (
-     JSString
-  ,  ToJS(..)
-  )
-  where
+module Language.UHC.JScript.ECMA.String where
 
 import Language.UHC.JScript.Types
 
