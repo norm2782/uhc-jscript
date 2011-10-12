@@ -9,4 +9,5 @@ f n x xs = n + x + xs
 fldToN :: (Int -> Int -> Int) -> Int -> Int
 fldToN f n = foldr f 0 [1..n]
 
-foreign export jscript "fldToN" fldToN :: (Int -> Int -> Int) -> Int -> Int
+foreign export jscript "fldToN"
+  fldToN :: (Int -> Int -> Int) -> Int -> Int

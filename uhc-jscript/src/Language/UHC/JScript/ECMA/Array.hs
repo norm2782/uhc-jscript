@@ -46,7 +46,7 @@ foreign import jscript "%1.join(%*)" join' :: JSArray x -> JSString -> JSString
 -- TODO: Do we want this to be in IO? We're mutating the array here...
 -- head/tail teruggeven in tupletje, in IO
 foreign import jscript "%1.pop"
-  pop :: JSArray x -> x
+  pop :: JSArray x -> IO x
 
 -- TODO: Again we are stuck with the n-argument problem
 -- | Push a new element onto an array. ECMA specifies that the new length is

@@ -1,5 +1,6 @@
 module Main where
 
+import  Language.UHC.JScript.Backbone.Model
 import  Language.UHC.JScript.ECMA.Array
 import  Language.UHC.JScript.ECMA.String
 import  Language.UHC.JScript.Types
