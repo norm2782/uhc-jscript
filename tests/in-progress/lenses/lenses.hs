@@ -50,6 +50,16 @@ foreign import jscript "setAttr(%*)"
 foreign import jscript "modAttr(%*)"
   modAttr :: JSString -> (a -> b) -> JSPtr p -> IO (JSPtr p)
 
+
+foreign import jscript "getProtoAttr(%*)"
+  getProtoAttr :: JSString -> JSString -> IO a
+
+foreign import jscript "setProtoAttr(%*)"
+  setProtoAttr :: JSString -> a -> JSString -> IO ()
+
+foreign import jscript "modProtoAttr(%*)"
+  modProtoAttr :: JSString -> (a -> b) -> JSString -> IO ()
+
 {-
 JS code:
 
