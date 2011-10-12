@@ -1,7 +1,5 @@
 function mkObj(nm) {
-  if (typeof(document[nm]) !== 'function') {
-    document[nm] = new Function();
-  }
+  mkCtor(nm);
   return new document[nm];
 }
 
@@ -16,23 +14,33 @@ function setAttr(attr, val, obj) {
 
 function modAttr(attr, f, obj) {
   // TODO: Is this the right way to apply a function from Haskell? Probably not...
-  obj[attr] = f.__evN__(obj[attr]);
+  setAttr(attr, f.__evN__(getAttr(attr, obj)), obj);
   return obj;
 }
 
 
 
-function getProtoAttr(attr, obj) {
-  return obj.prototype[attr];
+function mkCtor(nm) {
+  if (typeof(document[nm]) !== 'function') {
+    document[nm] = new Function();
+  }
 }
 
-function setProtoAttr(attr, val, obj) {
-  obj.prototype[attr] = val;
-  return obj;
+
+
+function getProtoAttr(attr, cls) {
+  mkCtor(cls);
+  return document[cls].prototype[attr];
 }
 
-function modProtoAttr(attr, f, obj) {
+function setProtoAttr(attr, val, cls) {
+  mkCtor(cls);
+  document[cls].prototype[attr] = val;
+  return document[cls];
+}
+
+function modProtoAttr(attr, f, cls) {
   // TODO: Is this the right way to apply a function from Haskell? Probably not...
-  obj.prototype[attr] = f.__evN__(obj.prototype[attr]);
-  return obj;
+  setProtoAttr(attr, f.__evN__(getProtoAttr(attr, cls)), cls);
+  return document[cls];
 }
