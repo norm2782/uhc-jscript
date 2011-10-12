@@ -1,7 +1,8 @@
-function Book() {}
-
-function mkBook() {
-  return new Book();
+function mkObj(nm) {
+  if (typeof(document[nm]) !== 'function') {
+    document[nm] = new Function();
+  }
+  return new document[nm];
 }
 
 function getAttr(attr, obj) {
