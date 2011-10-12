@@ -3,6 +3,7 @@ type JSString = PackedString
 
 data BookPtr
 
+type AnonObj = JSPtr ()
 type Book = JSPtr BookPtr
 
 foreign import prim "primStringToPackedString"
@@ -25,6 +26,19 @@ modPages :: (Int -> Int) -> Book -> IO Book
 modPages = modAttr pages
 
 
+mkAnon :: IO AnonObj
+mkAnon = mkAnonObj
+
+getNum :: AnonObj -> IO Int
+getNum = getAttr pages
+
+setNum :: Int -> AnonObj -> IO AnonObj
+setNum = setAttr pages
+
+modNum :: (Int -> Int) -> AnonObj -> IO AnonObj
+modNum = modAttr pages
+
+
 -- TODO: How do we deal with setting functions to be attributes on the objects?
 
 main :: IO ()
@@ -34,55 +48,42 @@ main = do
   a  <- getPages b
   b' <- modPages (+1) b
   c  <- getPages b'
-  putStrLn $ "Before: " ++ show a
+  putStrLn $ "Book pages before: " ++ show a
   putStrLn "<br />"
-  putStrLn $ "After: " ++ show c
+  putStrLn $ "Book pages after: " ++ show c
+  putStrLn "<br />"
+  anon  <- mkAnon
+  _     <- setNum 13 anon
+  pgs'  <- getNum anon
+  ano'  <- modNum (*2) anon
+  pgs   <- getNum ano'
+  putStrLn $ "Anon pages before: " ++ show pgs'
+  putStrLn "<br />"
+  putStrLn $ "Anon pages after: " ++ show pgs
 
-foreign import jscript "mkObj(%*)"
+foreign import prim "primMkAnonObj"
+  mkAnonObj :: IO AnonObj
+
+foreign import prim "primMkObj"
   mkObj :: JSString -> IO (JSPtr p)
 
-foreign import jscript "getAttr(%*)"
+foreign import prim "primGetAttr"
   getAttr :: JSString -> JSPtr p -> IO a
 
-foreign import jscript "setAttr(%*)"
+foreign import prim "primSetAttr"
   setAttr :: JSString -> a -> JSPtr p -> IO (JSPtr p)
 
-foreign import jscript "modAttr(%*)"
+foreign import prim "primModAttr"
   modAttr :: JSString -> (a -> b) -> JSPtr p -> IO (JSPtr p)
 
 
-foreign import jscript "getProtoAttr(%*)"
+foreign import prim "primGetProtoAttr"
   getProtoAttr :: JSString -> JSString -> IO a
 
-foreign import jscript "setProtoAttr(%*)"
+foreign import prim "primSetProtoAttr"
   setProtoAttr :: JSString -> a -> JSString -> IO ()
 
-foreign import jscript "modProtoAttr(%*)"
+foreign import prim "primModProtoAttr"
   modProtoAttr :: JSString -> (a -> b) -> JSString -> IO ()
 
-{-
-JS code:
 
-function mkObj(nm) {
-  if (typeof(document[nm]) !== 'function') {
-    document[nm] = new Function();
-  }
-  return new document[nm];
-}
-
-function getAttr(attr, obj) {
-  return obj[attr];
-}
-
-function setAttr(attr, val, obj) {
-  obj[attr] = val;
-  return obj;
-}
-
-function modAttr(attr, f, obj) {
-  // TODO: Is this the right way to apply a function from Haskell? Probably not...
-  obj[attr] = f.__evN__(obj[attr]);
-  return obj;
-}
-
--}
