@@ -36,11 +36,9 @@ function getProtoAttr(attr, cls) {
 function setProtoAttr(attr, val, cls) {
   mkCtor(cls);
   document[cls].prototype[attr] = val;
-  return document[cls];
 }
 
 function modProtoAttr(attr, f, cls) {
   // TODO: Is this the right way to apply a function from Haskell? Probably not...
   setProtoAttr(attr, f.__evN__(getProtoAttr(attr, cls)), cls);
-  return document[cls];
 }
