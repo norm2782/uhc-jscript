@@ -1,15 +1,19 @@
 data JSPtr a
+type JSString = PackedString
 
 data BookPtr
 
 type Book = JSPtr BookPtr
 
+foreign import prim "primStringToPackedString"
+  s2js :: String -> JSString
 
-pages = "pages"
+pages :: JSString
+pages = s2js "pages"
 
 -- TODO: Do we need a mkProto as well?
 mkBook :: IO Book
-mkBook = mkObj "Book"
+mkBook = mkObj $ s2js "Book"
 
 getPages :: Book -> IO Int
 getPages = getAttr pages
@@ -34,16 +38,16 @@ main = do
   putStrLn $ "After: " ++ show c
 
 foreign import jscript "mkObj(%*)"
-  mkObj :: String -> IO (JSPtr p)
+  mkObj :: JSString -> IO (JSPtr p)
 
 foreign import jscript "getAttr(%*)"
-  getAttr :: String -> JSPtr p -> IO a
+  getAttr :: JSString -> JSPtr p -> IO a
 
 foreign import jscript "setAttr(%*)"
-  setAttr :: String -> a -> JSPtr p -> IO (JSPtr p)
+  setAttr :: JSString -> a -> JSPtr p -> IO (JSPtr p)
 
 foreign import jscript "modAttr(%*)"
-  modAttr :: String -> (a -> b) -> JSPtr p -> IO (JSPtr p)
+  modAttr :: JSString -> (a -> b) -> JSPtr p -> IO (JSPtr p)
 
 {-
 JS code:
