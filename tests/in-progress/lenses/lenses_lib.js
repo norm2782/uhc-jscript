@@ -1,25 +1,28 @@
+// mkObj :: String -> JSPtr c
 function mkObj(nm) {
   mkCtor(nm);
   return new document[nm];
 }
 
+// getAttr :: String -> JSPtr c -> a
 function getAttr(attr, obj) {
   return obj[attr];
 }
 
+// setAttr :: String -> a -> JSPtr c -> JSPtr c
 function setAttr(attr, val, obj) {
   obj[attr] = val;
   return obj;
 }
 
+// modAttr :: String -> (a -> b) -> JSPtr c -> JSPtr c
 function modAttr(attr, f, obj) {
-  // TODO: Is this the right way to apply a function from Haskell? Probably not...
-  setAttr(attr, f.__evN__(getAttr(attr, obj)), obj);
+  setAttr(attr, _e_(new _A_(f, [getAttr(attr, obj)])), obj);
   return obj;
 }
 
 
-
+// mkCtor :: String -> ()
 function mkCtor(nm) {
   if (typeof(document[nm]) !== 'function') {
     document[nm] = new Function();
@@ -27,18 +30,19 @@ function mkCtor(nm) {
 }
 
 
-
+// getProtoAttr :: String -> String -> a
 function getProtoAttr(attr, cls) {
   mkCtor(cls);
   return document[cls].prototype[attr];
 }
 
+// setProtoAttr :: String -> a -> String -> ()
 function setProtoAttr(attr, val, cls) {
   mkCtor(cls);
   document[cls].prototype[attr] = val;
 }
 
+// modProtoAttr :: String -> (a -> b) -> String -> ()
 function modProtoAttr(attr, f, cls) {
-  // TODO: Is this the right way to apply a function from Haskell? Probably not...
-  setProtoAttr(attr, f.__evN__(getProtoAttr(attr, cls)), cls);
+  setProtoAttr(attr, _e_(new _A_(f, [getProtoAttr(attr, cls)])), cls);
 }
