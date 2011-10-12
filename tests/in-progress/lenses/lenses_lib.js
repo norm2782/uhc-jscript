@@ -19,3 +19,20 @@ function modAttr(attr, f, obj) {
   obj[attr] = f.__evN__(obj[attr]);
   return obj;
 }
+
+
+
+function getProtoAttr(attr, obj) {
+  return obj.prototype[attr];
+}
+
+function setProtoAttr(attr, val, obj) {
+  obj.prototype[attr] = val;
+  return obj;
+}
+
+function modProtoAttr(attr, f, obj) {
+  // TODO: Is this the right way to apply a function from Haskell? Probably not...
+  obj.prototype[attr] = f.__evN__(obj.prototype[attr]);
+  return obj;
+}

@@ -24,6 +24,7 @@ setPages = setAttr pages
 modPages :: (Int -> Int) -> Book -> IO Book
 modPages = modAttr pages
 
+
 -- TODO: How do we deal with setting functions to be attributes on the objects?
 
 main :: IO ()
