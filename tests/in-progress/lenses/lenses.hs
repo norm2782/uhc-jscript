@@ -6,11 +6,13 @@ data BookPtr
 type AnonObj = JSPtr ()
 type Book = JSPtr BookPtr
 
-foreign import prim "primStringToPackedString"
-  s2js :: String -> JSString
 
 pages :: JSString
 pages = s2js "pages"
+
+num :: JSString
+num = s2js "num"
+
 
 -- TODO: Do we need a mkProto as well?
 mkBook :: IO Book
@@ -30,13 +32,13 @@ mkAnon :: IO AnonObj
 mkAnon = mkAnonObj
 
 getNum :: AnonObj -> IO Int
-getNum = getAttr pages
+getNum = getAttr num
 
 setNum :: Int -> AnonObj -> IO AnonObj
-setNum = setAttr pages
+setNum = setAttr num
 
 modNum :: (Int -> Int) -> AnonObj -> IO AnonObj
-modNum = modAttr pages
+modNum = modAttr num
 
 
 -- TODO: How do we deal with setting functions to be attributes on the objects?
@@ -57,9 +59,9 @@ main = do
   pgs'  <- getNum anon
   ano'  <- modNum (*2) anon
   pgs   <- getNum ano'
-  putStrLn $ "Anon pages before: " ++ show pgs'
+  putStrLn $ "Anon num before: " ++ show pgs'
   putStrLn "<br />"
-  putStrLn $ "Anon pages after: " ++ show pgs
+  putStrLn $ "Anon num after: " ++ show pgs
 
 foreign import prim "primMkAnonObj"
   mkAnonObj :: IO AnonObj
@@ -87,3 +89,5 @@ foreign import prim "primModProtoAttr"
   modProtoAttr :: JSString -> (a -> b) -> JSString -> IO ()
 
 
+foreign import prim "primStringToPackedString"
+  s2js :: String -> JSString
