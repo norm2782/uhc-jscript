@@ -17,7 +17,7 @@ jsStringToString :: JSString -> String
 jsStringToString str
   | primPackedStringNull str  =  []
   | otherwise                 =  primPackedStringHead str
-                              :  fromJS (primPackedStringTail str)
+                              :  jsStringToString (primPackedStringTail str)
 
 foreign import jscript "primPackedStringNull"
   primPackedStringNull :: JSString -> Bool

@@ -7,16 +7,52 @@ import Language.UHC.JScript.Types
 data JQueryPtr
 type JQuery = JSPtr JQueryPtr
 
-fast, slow :: Int
-fast = 200
-slow = 600
+-------------------------------------------------------------------------------
+-- jQuery Core
 
-select :: String -> IO JQuery
-select = _select . toJS
+jQuery :: String -> IO JQuery
+jQuery = _jQuery . toJS
 
-foreign import jscript "$(%1)"
-  _select :: JSString -> IO JQuery
+jQuery' :: String -> JSPtr a -> IO JQuery
+jQuery' s j = _jQuery' (toJS s) j
 
+foreign import jscript "jQuery(%*)"
+  _jQuery :: JSString -> IO JQuery
+
+foreign import jscript "jQuery(%*)"
+  _jQuery' :: JSString -> JSPtr a -> IO JQuery
+
+foreign import jscript "jQuery(%*)"
+  jQueryObj :: JSPtr a -> IO JQuery
+
+foreign import jscript "jQuery()"
+  jQuery_ :: IO JQuery
+
+
+foreign import jscript "$.holdReady(%*)"
+  holdReady :: Bool -> IO ()
+
+foreign import jscript "$.noConflict()"
+  noConflict :: IO ()
+
+foreign import jscript "$.noConflict(%*)"
+  noConflict' :: Bool -> IO ()
+
+foreign import jscript "jQuery.sub()"
+  sub :: IO JQuery
+
+foreign import jscript "jQuery.when(%*)"
+  when :: JSPtr a -> IO JQuery
+
+foreign import jscript "jQuery.when(%*)"
+  when' :: JSPtr a -> JSPtr a -> IO JQuery
+
+foreign import jscript "jQuery.when(%*)"
+  when'' :: JSPtr a -> JSPtr a -> JSPtr a -> IO JQuery
+
+
+-------------------------------------------------------------------------------
+-- Manipulation
 
 getHTML :: JQuery -> IO String
 getHTML jq = do
@@ -42,6 +78,15 @@ addClass j s = _addClass j (toJS s)
  -- Or return JQuery for chaining??? Does chaining even make sense?
 foreign import jscript "%1.addClass(%2)"
   _addClass :: JQuery -> JSString -> IO ()
+
+
+
+-------------------------------------------------------------------------------
+-- Effects
+
+fast, slow :: Int
+fast = 200
+slow = 600
 
 --
 -- The show() function
