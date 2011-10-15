@@ -4,10 +4,29 @@ module Language.UHC.JScript.ECMA.String where
 
 import Language.UHC.JScript.Types
 
+type JSString = PackedString
+
 instance ToJS String JSString where
   toJS = stringToJSString
 
-type JSString = PackedString
+instance FromJS JSString String where
+  fromJS = jsStringToString
+
+
+jsStringToString :: JSString -> String
+jsStringToString str
+  | primPackedStringNull str  =  []
+  | otherwise                 =  primPackedStringHead str
+                              :  fromJS (primPackedStringTail str)
+
+foreign import jscript "primPackedStringNull"
+  primPackedStringNull :: JSString -> Bool
+
+foreign import jscript "primPackedStringHead"
+  primPackedStringHead :: JSString -> Char
+
+foreign import jscript "primPackedStringTail"
+  primPackedStringTail :: JSString -> JSString
 
 foreign import jscript "String.fromCharCode(%*)"
   fromCharCode :: Int -> JSString
