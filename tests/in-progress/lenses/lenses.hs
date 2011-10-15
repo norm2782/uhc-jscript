@@ -28,6 +28,10 @@ modPages :: (Int -> Int) -> Book -> IO Book
 modPages = modAttr pages
 
 
+isAwesome :: Book -> IO Bool
+isAwesome = getAttr $ s2js "isAwesome"
+
+
 mkAnon :: IO AnonObj
 mkAnon = mkAnonObj
 
