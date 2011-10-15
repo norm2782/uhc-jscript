@@ -42,13 +42,13 @@ foreign import jscript "jQuery.sub()"
   sub :: IO JQuery
 
 foreign import jscript "jQuery.when(%*)"
-  when :: JSPtr a -> IO JQuery
+  when :: JSPtr a -> IO ()
 
 foreign import jscript "jQuery.when(%*)"
-  when' :: JSPtr a -> JSPtr a -> IO JQuery
+  when' :: JSPtr a -> JSPtr a -> IO ()
 
 foreign import jscript "jQuery.when(%*)"
-  when'' :: JSPtr a -> JSPtr a -> JSPtr a -> IO JQuery
+  when'' :: JSPtr a -> JSPtr a -> JSPtr a -> IO ()
 
 
 -------------------------------------------------------------------------------
