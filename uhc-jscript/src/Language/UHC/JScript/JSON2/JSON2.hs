@@ -29,10 +29,6 @@ foreign import jscript "JSON.stringify(%*)"
 
 -- TODO: All permutations for stringify
 
-foreign import jscript "JSON.stringify(%*)"
-  _stringify' :: JSArray a -> IO JSString
-
-
 parse :: String -> IO (JSPtr a)
 parse = _parse . toJS
 
