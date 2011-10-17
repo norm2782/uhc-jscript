@@ -19,6 +19,12 @@ mkObj = _mkObj . stringToJSString
 foreign import prim "primMkObj"
   _mkObj :: JSString -> IO (JSPtr p)
 
+mkCtor :: String -> IO (JSFunPtr a)
+mkCtor = _mkCtor . stringToJSString
+
+foreign import prim "primMkCtor"
+  _mkCtor :: JSString -> IO (JSFunPtr a)
+
 getCtor :: String -> IO (JSFunPtr a)
 getCtor s1 = _getCtor (stringToJSString s1)
 
