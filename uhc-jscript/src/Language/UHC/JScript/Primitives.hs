@@ -5,6 +5,7 @@ import Language.UHC.JScript.ECMA.String
 
 
 data JSPtr a
+data JSFunPtr a
 type JSString = PackedString
 type AnonObj = JSPtr ()
 
@@ -18,6 +19,17 @@ mkObj = _mkObj . stringToJSString
 foreign import prim "primMkObj"
   _mkObj :: JSString -> IO (JSPtr p)
 
+getCtor :: String -> IO (JSFunPtr a)
+getCtor s1 = _getCtor (stringToJSString s1)
+
+foreign import prim "primGetCtor"
+  _getCtor :: JSString -> IO (JSFunPtr a)
+
+setCtor :: String -> JSFunPtr a -> IO ()
+setCtor s1 fp = _setCtor (stringToJSString s1) fp
+
+foreign import prim "primSetCtor"
+  _setCtor :: JSString -> JSFunPtr a -> IO ()
 
 getAttr :: String -> JSPtr p -> IO a
 getAttr s p = _getAttr (stringToJSString s) p
