@@ -12,17 +12,13 @@ data JSONPtr
 type JSON = JSPtr JSONPtr
 
 stringify :: JSPtr a -> IO String
-stringify p = do
-  jss <- _stringify p
-  return $ fromJS jss
+stringify = fromJSM . _stringify
 
 foreign import jscript "JSON.stringify(%*)"
   _stringify :: JSPtr a -> IO JSString
 
 stringify' :: JSArray a -> IO String
-stringify' p = do
-  jss <- _stringify' p
-  return $ fromJS jss
+stringify' = fromJSM . _stringify'
 
 foreign import jscript "JSON.stringify(%*)"
   _stringify' :: JSArray a -> IO JSString

@@ -55,9 +55,7 @@ foreign import jscript "jQuery.when(%*)"
 -- Manipulation
 
 getHTML :: JQuery -> IO String
-getHTML jq = do
-  s <- _getHTML jq
-  return $ fromJS s
+getHTML = fromJSM . _getHTML
 
 foreign import jscript "%1.html()"
   _getHTML :: JQuery -> IO JSString
