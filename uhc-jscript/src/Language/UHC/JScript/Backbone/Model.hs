@@ -9,7 +9,11 @@ data BBModelPtr a
 type BBModel a = JSPtr (BBModelPtr a)
 
 foreign import jscript "Backbone.Model.extend(%*)"
-  extend :: JSFunPtr a -> IO (JSFunPtr b)
+  extend :: AnonObj -> IO (JSFunPtr b)
+
+foreign import jscript "Backbone.Model.extend(%*)"
+  extend' :: AnonObj -> AnonObj -> IO (JSFunPtr b)
+
 
 get :: BBModel a -> String -> IO b
 get p s = _get p (toJS s)
