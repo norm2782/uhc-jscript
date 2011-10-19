@@ -14,5 +14,5 @@ fromJSM :: (Monad m, FromJS a b) => m a -> m b
 fromJSM = liftM fromJS
 
 mkIdxRes :: Int -> Maybe Int
-mkIdxRes (-1) = Nothing
-mkIdxRes n    = Just n
+mkIdxRes (-1)  = Nothing
+mkIdxRes n     = Just n

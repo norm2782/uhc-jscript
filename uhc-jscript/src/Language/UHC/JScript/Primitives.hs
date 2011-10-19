@@ -7,6 +7,7 @@ import Language.UHC.JScript.Types
 
 data JSPtr a
 data JSFunPtr a
+
 type JSString = PackedString
 type AnonObj = JSPtr ()
 

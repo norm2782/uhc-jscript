@@ -114,10 +114,12 @@ getUrl = fromJSM . _getUrl
 foreign import jscript "getUrl(%1)"
   _getUrl :: BBModel a -> IO JSString
 
--- TODO: `url` can also be a function. This function would normally use `this`
--- to create a URL. We might need some notion of `this` here as well, so we can
--- define functions that use `this`.
 
+setUrl :: String -> BBModel a -> IO (BBModel a)
+setUrl s m = setAttr "url" (toJS s) m
+
+setUrl' :: JSFunPtr b -> BBModel a -> IO (BBModel a)
+setUrl' = setAttr "url"
 
 getUrlRoot :: BBModel a -> IO String
 getUrlRoot m = fromJSM rt
