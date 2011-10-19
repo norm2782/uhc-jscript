@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -iname "*.hi" -o -iname "*.js" -o -iname "*.mjs" -o -iname "*.html" -o -iname "*.core" | xargs rm
+find . -iname "*.hi" -o -iname "*.js" -o -iname "*.mjs" -o -iname "*.html" -o -iname "*.core*" | xargs rm
