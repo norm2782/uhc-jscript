@@ -39,8 +39,11 @@ main = accepts3Args 1 2 3
 -- arguments into one list (e.g. by prepending the first arguments to the
 -- n-args list) and then call apply(). Does the UHC JS lib already have a
 -- function for this?
-foreign import jscript "acceptsNArgs(%[*])"
-  acceptsNArgs :: [Int] -> IO ()
+--
+-- This function below is commented out, because the proposed interface has
+-- been discarded in favor of the suggested approach below
+{- foreign import jscript "acceptsNArgs(%[*])"-}
+  {- acceptsNArgs :: [Int] -> IO ()-}
 
 -- This solution isn't exactly pretty: we're still hardcoding the number of
 -- arguments the JS function is given. The difference is that on the JS side,
