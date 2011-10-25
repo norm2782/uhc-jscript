@@ -89,6 +89,3 @@ modProtoAttr x f y = _modProtoAttr (toJS x) f (toJS y)
 foreign import prim "primModProtoAttr"
   _modProtoAttr :: JSString -> (a -> b) -> JSString -> IO ()
 
-
-foreign import prim "primStringToPackedString"
-  toJS :: String -> JSString

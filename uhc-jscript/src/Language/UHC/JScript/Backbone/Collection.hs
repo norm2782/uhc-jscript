@@ -85,7 +85,9 @@ foreign import jscript "%1.pluck(%*)"
   _pluck :: BBCollection a -> JSString -> IO (JSArray b)
 
 setUrl :: String -> BBCollection a -> IO (BBCollection a)
-setUrl s m = setAttr "url" (toJS s) m
+setUrl s m = setAttr "url" s' m
+  where  s' :: JSString
+         s' = toJS s
 
 setUrl' :: JSFunPtr b -> BBCollection a -> IO (BBCollection a)
 setUrl' = setAttr "url"

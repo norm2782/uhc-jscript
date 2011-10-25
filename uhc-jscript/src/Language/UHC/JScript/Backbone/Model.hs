@@ -120,7 +120,9 @@ foreign import jscript "getUrl(%1)"
 
 
 setUrl :: String -> BBModel a -> IO (BBModel a)
-setUrl s m = setAttr "url" (toJS s) m
+setUrl s m = setAttr "url" s' m
+  where  s' :: JSString
+         s' = toJS s
 
 setUrl' :: JSFunPtr b -> BBModel a -> IO (BBModel a)
 setUrl' = setAttr "url"
@@ -131,7 +133,9 @@ getUrlRoot m = fromJSM rt
          rt = getAttr "urlRoot" m
 
 setUrlRoot :: String -> BBModel a -> IO (BBModel a)
-setUrlRoot s m = setAttr "urlRoot" (toJS s) m
+setUrlRoot s m = setAttr "urlRoot" s' m
+  where  s' :: JSString
+         s' = toJS s
 
 -- TODO: Same concerns as setValidateFn
 setParseFn :: (AnonObj -> AnonObj) -> BBModel a -> IO (BBModel a)
