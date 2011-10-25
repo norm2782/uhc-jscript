@@ -39,12 +39,11 @@ setCtor s1 fp = _setCtor (toJS s1) fp
 foreign import prim "primSetCtor"
   _setCtor :: JSString -> JSFunPtr a -> IO ()
 
-getAttr :: String -> JSPtr p -> IO a
+getAttr :: String -> JSPtr p -> a
 getAttr s p = _getAttr (toJS s) p
 
 foreign import prim "primGetAttr"
-  _getAttr :: JSString -> JSPtr p -> IO a
-
+  _getAttr :: JSString -> JSPtr p -> a
 
 setAttr :: String -> a -> JSPtr p -> IO (JSPtr p)
 setAttr s a p = _setAttr (toJS s) a p
@@ -52,6 +51,11 @@ setAttr s a p = _setAttr (toJS s) a p
 foreign import prim "primSetAttr"
   _setAttr :: JSString -> a -> JSPtr p -> IO (JSPtr p)
 
+pureSetAttr :: String -> a -> JSPtr p -> JSPtr p
+pureSetAttr s a p = _pureSetAttr (toJS s) a p
+
+foreign import prim "primPureSetAttr"
+  _pureSetAttr :: JSString -> a -> JSPtr p -> JSPtr p
 
 modAttr :: String -> (a -> b) -> JSPtr p -> IO (JSPtr p)
 modAttr s f p = _modAttr (toJS s) f p
@@ -59,6 +63,11 @@ modAttr s f p = _modAttr (toJS s) f p
 foreign import prim "primModAttr"
   _modAttr :: JSString -> (a -> b) -> JSPtr p -> IO (JSPtr p)
 
+pureModAttr :: String -> (a -> b) -> JSPtr p -> JSPtr p
+pureModAttr s f p = _pureModAttr (toJS s) f p
+
+foreign import prim "primPureModAttr"
+  _pureModAttr :: JSString -> (a -> b) -> JSPtr p -> JSPtr p
 
 getProtoAttr :: String -> String -> IO a
 getProtoAttr x y = _getProtoAttr (toJS x) (toJS y)
