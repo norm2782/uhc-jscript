@@ -1,4 +1,6 @@
-FLAGS = -tjscript --dump-core-stages=1 --dump-grin-stages=1 -O1,2 --gen-trace=1 --import-path=../../../uhc-jscript/src
+# FLAGS = -tjscript --dump-core-stages=1 --dump-grin-stages=1 -O1,2 --gen-trace=1 --import-path=../../../uhc-jscript/src
+FLAGS = -tjscript --dump-core-stages=1 --dump-grin-stages=1 --gen-trace=1 --import-path=../../../uhc-jscript/src
+
 
 ifndef PROJECT
   PROJECT = $(patsubst %.hs, %, $(wildcard *.hs))
