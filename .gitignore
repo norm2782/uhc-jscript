@@ -5,3 +5,14 @@ EHC
 *.html
 *.js
 *.mjs
+haskell-jscript-libraries/
+*.tex
+*.xml
+*.ptb
+*.pdf
+*.out
+*.log
+*.bcf
+*.bbl
+*.blg
+*.aux*
