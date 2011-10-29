@@ -89,3 +89,9 @@ modProtoAttr x f y = _modProtoAttr (toJS x) f (toJS y)
 foreign import prim "primModProtoAttr"
   _modProtoAttr :: JSString -> (a -> b) -> JSString -> IO ()
 
+foreign import prim "primClone"
+  primClone :: JSPtr a -> JSPtr a
+
+foreign import prim "primToPlainObj"
+  primToPlainObj :: JSPtr a -> JSPtr b
+
