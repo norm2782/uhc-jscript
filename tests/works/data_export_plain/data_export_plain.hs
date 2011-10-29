@@ -29,5 +29,6 @@ myBook = Book (stringToJSString "story") (stringToJSString "me") 123
 
 {- foreign export jscript "myBook" myBook :: Book-}
 foreign export jscript "{myBook}" myBook :: Book
-foreign import jscript "myBook()" myBookPtr :: JSBook
+{- foreign import jscript "myBook()" myBookPtr :: JSBook-}
+foreign import jscript "{myBook}" myBookPtr :: JSBook
 
