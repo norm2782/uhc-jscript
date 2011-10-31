@@ -6,6 +6,9 @@ import Language.UHC.JScript.Types
 
 type JSString = PackedString
 
+instance Show JSString where
+  show = jsStringToString
+
 instance ToJS String JSString where
   toJS = stringToJSString
 

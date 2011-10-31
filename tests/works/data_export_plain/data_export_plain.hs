@@ -18,7 +18,7 @@ data Book
   ,  author  :: JSString
   ,  count   :: Int
   }
-  {- deriving Show-}
+  deriving Show
 
 add :: Int -> Int -> Int
 add x y = y + x
