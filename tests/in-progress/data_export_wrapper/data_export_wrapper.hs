@@ -23,9 +23,9 @@ some_function(5, 15, function(num) {
 foreign import jscript "some_function(%*)"
   someFun :: Int -> Int -> FunPtr (Int -> IO ()) -> IO ()
 
-foreign import jscript "wrapper"
-  wrap :: (Int -> IO ()) -> IO (FunPtr (Int -> IO ()))
-
+{- foreign import jscript "wrapper"-}
+  {- wrap :: (Int -> IO ()) -> IO (FunPtr (Int -> IO ()))-}
+wrap = undefined
 
 myCB :: Int -> IO ()
 myCB = putStrLn . show
