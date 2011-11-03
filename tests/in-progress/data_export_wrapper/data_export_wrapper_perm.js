@@ -1,4 +1,5 @@
 function some_function(arg1, arg2, callback) {
-  var my_number = Math.ceil(Math.random() * (arg1 - arg2) + arg2);
-  callback(my_number);
+  var num = Math.ceil(arg1 + arg2);
+  var res = callback(num);
+  return res;
 }
