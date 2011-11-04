@@ -6,13 +6,13 @@ import UHC.Ptr
 
 
 foreign import jscript "some_function(%*)"
-  someFun :: Int -> Int -> FunPtr (Int -> Int -> IO ()) -> IO ()
+  someFun :: Int -> Int -> FunPtr (Int -> IO ()) -> IO ()
 
 foreign import jscript "wrapper"
-  wrap :: (Int -> Int -> IO ()) -> IO (FunPtr (Int -> Int -> IO ()))
+  wrap :: (Int -> IO ()) -> IO (FunPtr (Int -> IO ()))
 
-myCB :: Int -> Int -> IO ()
-myCB _ = alert . show
+myCB :: Int -> IO ()
+myCB = alert . show
 
 main :: IO ()
 main = do
