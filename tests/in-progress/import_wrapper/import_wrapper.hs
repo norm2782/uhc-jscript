@@ -12,13 +12,17 @@ foreign import jscript "wrapper"
   wrap :: (Int -> IO ()) -> IO (FunPtr (Int -> IO ()))
 
 myCB :: Int -> IO ()
-myCB = alert . show
+myCB n = alert (show n)
 
 main :: IO ()
-main = do
+main =
   putStrLn "data_export_wrapper"
-  sf <- wrap myCB
-  someFun 2 3 sf
+  >>= \_  -> wrap myCB
+  >>= \sf -> someFun 2 3 sf
+{- main = do-}
+  {- putStrLn "data_export_wrapper"-}
+  {- sf <- wrap myCB-}
+  {- someFun 2 3 sf-}
 
 {-
 
@@ -35,4 +39,26 @@ how to deal with these, so we need to wrap them in a regular JS function, which
 takes as many arguments as the Haskell function. The Haskell function is then
 applied to the arguments and the result is returned. This also explains the
 name wrapper....
+
+
+$import_wrapper.$wrap=
+ new _F_("import_wrapper.wrap",function($__,$__2)
+                               {trace(">$import_wrapper.$wrap"," <- "+$__+", "+$__2);
+                                var $__3=
+                                 _e_($__);
+                                var $__4=
+                                 _e_(function(vr1)
+                                     {return _e_(new _A_($__3,[vr1]));});
+                                var _=
+                                 [$__2,$__4];
+                                trace("<$import_wrapper.$wrap"," -> "+_);
+                                return _;});
+
+
+This is an example of the code that's generated for the wrap import. Would the
+$__2 represent the IO monad? So in case our callback is in IO, we require the
+callback function to be also applied to $__2, whereas we don't require this if
+it's pure.
+
+
 -}
