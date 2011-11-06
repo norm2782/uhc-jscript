@@ -4,10 +4,8 @@ import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Types
 import UHC.Ptr
 
-type JSFunPtr a = FunPtr a
-
 data JSPtr a
-data JSFunPtr a
+type JSFunPtr a = FunPtr a
 
 type JSString = PackedString
 type AnonObj = JSPtr ()
