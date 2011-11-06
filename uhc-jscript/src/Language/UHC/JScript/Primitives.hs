@@ -2,6 +2,7 @@ module Language.UHC.JScript.Primitives where
 
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Types
+import UHC.Ptr
 
 type JSFunPtr a = FunPtr a
 
