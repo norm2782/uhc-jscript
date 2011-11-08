@@ -45,7 +45,7 @@ data Book
   }
 
 add :: Int -> Int -> IO ()
-add x y = alert . show $ y + x
+add x y = print $ y + x
 
 -- TODO
 -- The current problem is that we need to do something like this:
