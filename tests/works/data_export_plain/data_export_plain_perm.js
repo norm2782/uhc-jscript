@@ -1,4 +1,3 @@
-function myFun() {
-  var book = myBook();
-  return book;
+function myFun(book) {
+  book.doMath(2,3);
 }

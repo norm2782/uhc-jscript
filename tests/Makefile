@@ -7,20 +7,10 @@ endif
 
 default: $(PROJECT).js
 
-%.js: %.hs
-	$(UHC) $< $(FLAGS)
+$(PROJECT).js: $(PROJECT).hs
+	$(UHC) $(PROJECT).hs $(FLAGS)
 
 clean:
-	rm $(PROJECT).core* $(PROJECT).full.core $(PROJECT).hi $(PROJECT).js $(PROJECT).html $(PROJECT).mjs
+	rm *.core* *.full.core *.hi $(PROJECT).js $(PROJECT).html *.mjs
 
-strip:
-	find . -iname "*.core*" | xargs gsed -i 's/$$UHC$$\.Base$$\.//g';
-	find . -iname "*.core*" | xargs gsed -i 's/UHC\.Base\.//g';
-	find . -iname "*.core*" | xargs gsed -i 's/$$UHC$$\.Run$$\.//g';
-	find . -iname "*.core*" | xargs gsed -i 's/$$UHC$$\.OldIO$$\.//g';
-	perl -pi -w -e 's/(_\d+)*_\$@\d[A-Z]+_\$@(\d+(_\d+)*)//g;' *.core*
-
-.PHONY : clean strip tst
-
-tst:
-	echo $(patsubst %.hs, %, $(PROJECTh
+.PHONY : clean strip
