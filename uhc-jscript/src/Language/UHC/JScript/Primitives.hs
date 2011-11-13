@@ -14,11 +14,11 @@ foreign import prim "primMkAnonObj"
   mkAnonObj :: IO AnonObj
 
 
-mkObj :: String -> IO (JSPtr p)
-mkObj = _mkObj . toJS
+newObj :: String -> IO (JSPtr p)
+newObj = _newObj . toJS
 
 foreign import prim "primMkObj"
-  _mkObj :: JSString -> IO (JSPtr p)
+  _newObj :: JSString -> IO (JSPtr p)
 
 mkCtor :: String -> IO (JSFunPtr a)
 mkCtor = _mkCtor . toJS
