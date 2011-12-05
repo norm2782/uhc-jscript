@@ -54,7 +54,8 @@ module Language.UHC.JScript.W3C.HTML5
 import Language.UHC.JScript.ECMA.Array
 import Language.UHC.JScript.ECMA.String
 
-data Document
+data DocumentPtr
+type Document = JSPtr DocumentPtr
 
 foreign import jscript "document"
   document :: IO Document
@@ -86,7 +87,8 @@ foreign import jscript "%1.getElementsByName(%*)"
 foreign import jscript "%1.getElementsByTagName(%*)"
   documentGetElementsByTagName :: Document -> JSString -> IO (NodeList Node)
 
-data Anchor
+data AnchorPtr
+type Anchor = JSPtr AnchorPtr
 
 foreign import jscript "%1.charset"
   anchorCharset :: Anchor -> JSString
@@ -112,16 +114,20 @@ foreign import jscript "%1.target"
 foreign import jscript "%1.type"
   anchorType :: Anchor -> JSString
 
-data Form
+data FormPtr
+type Form = JSPtr FormPtr
 
 foreign import jscript "%1.elements"
   formElements :: Form -> JSArray Element
 
-data Image
+data ImagePtr
+type Image = JSPtr ImagePtr
 
-data Link
+data LinkPtr
+type Link  = JSPtr LinkPtr
 
-data Element
+data ElementPtr
+type Element = JSPtr ElementPtr
 
 foreign import jscript "%1.innerHTML"
   elementInnerHTML :: Node -> JSString
@@ -138,7 +144,8 @@ foreign import jscript "%1.clientHeight"
 foreign import jscript "%1.attributes"
   elementAttributes :: Node -> NamedNodeMap Node
 
-data Node
+data NodePtr
+type Node = JSPtr NodePtr
 
 foreign import jscript "%1.nodeName"
   nodeName :: Node -> JSString
@@ -146,7 +153,8 @@ foreign import jscript "%1.nodeName"
 foreign import jscript "%1.nodeType"
   nodeType :: Node -> Int
 
-data NodeList x
+data NodeListPtr x
+type NodeList x = JSPtr (NodeListPtr x)
 
 foreign import jscript "%1.length"
   nodeListLength :: NodeList Node -> Int
@@ -154,7 +162,8 @@ foreign import jscript "%1.length"
 foreign import jscript "%1[%2]"
   nodeListItem :: NodeList Node -> Int -> IO Node
 
-data NamedNodeMap x
+data NamedNodeMapPtr x
+type NamedNodeMap x    = JSPtr (NamedNodeMapPtr x)
 
 foreign import jscript "%1.length"
   namedNodeMapLength :: NamedNodeMap Node -> Int
@@ -171,7 +180,8 @@ foreign import jscript "%1.removeNamedItem(%*)"
 foreign import jscript "%1.setNamedItem(%*)"
   namedNodeMapSetNamedItem :: NamedNodeMap Node -> Node -> IO Node
 
-data Attr
+data AttrPtr
+type Attr    = JSPtr AttrPtr
 
 foreign import jscript "%1.value"
   attrValue :: Attr -> JSString

@@ -4,6 +4,8 @@ import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives
 import Language.UHC.JScript.Types
 
+import Language.UHC.JScript.Assorted (alert)
+
 data JQueryPtr
 type JQuery = JSPtr JQueryPtr
 
@@ -49,7 +51,19 @@ foreign import jscript "jQuery.when(%*)"
 
 foreign import jscript "jQuery.when(%*)"
   when'' :: JSPtr a -> JSPtr a -> JSPtr a -> IO ()
+  
+  
+-------------------------------------------------------------------------------
+-- DOM
 
+findSelector :: JQuery -> String -> IO JQuery
+findSelector jq = findSelector' jq . toJS
+
+foreign import jscript "%1.find(%2)"
+  findSelector' :: JQuery -> JSString -> IO JQuery
+
+foreign import jscript "%1.find(%2)"
+  findObject :: JQuery -> JQuery -> IO JQuery
 
 -------------------------------------------------------------------------------
 -- Manipulation
@@ -105,3 +119,44 @@ jqshow j (Just n) (Just e) Nothing  = jqshow2  j n (toJS e)
 jqshow j (Just n) Nothing  (Just c) = jqshow2' j n c
 jqshow j (Just n) (Just e) (Just c) = jqshow3  j n (toJS e) c
 
+
+-------------------------------------------------------------------------------
+-- Events
+
+data JUIPtr
+type JUI = JSPtr JUIPtr
+
+type JEventResult    = IO Bool
+type JEventHandler   = JSFunPtr ( JQuery -> JEventResult )
+type JUIEventHandler = JSFunPtr ( JQuery -> JUI -> JEventResult )
+type JEventType      = String
+
+bind :: JQuery -> JEventType -> JEventHandler -> IO ()
+bind jq event eh = do alert "Executing bind!"
+                      _bind jq (toJS event) eh
+
+foreign import jscript "%1.bind(%*)"
+  _bind :: JQuery -> JSString -> JEventHandler -> IO ()
+
+
+blur :: JQuery -> JEventHandler -> IO ()
+blur = undefined
+
+
+click :: JQuery -> JEventHandler -> IO ()
+click = _click
+
+foreign import jscript "%1.click(%2)"
+  _click :: JQuery -> JEventHandler -> IO ()
+
+
+keypress :: JQuery -> JEventHandler -> IO ()
+keypress = undefined
+
+
+onDocumentReady :: JSFunPtr (IO ()) -> IO ()
+onDocumentReady f = do document <- jQuery "document"
+                       _ready document f
+
+foreign import jscript "%1.ready(%2)"
+  _ready :: JQuery -> JSFunPtr (IO ()) -> IO ()
