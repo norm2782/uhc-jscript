@@ -160,3 +160,23 @@ onDocumentReady f = do document <- jQuery "document"
 
 foreign import jscript "%1.ready(%2)"
   _ready :: JQuery -> JSFunPtr (IO ()) -> IO ()
+  
+-------------------------------------------------------------------------------
+-- DOM Manipulation
+
+append :: JQuery -> JQuery -> IO ()
+append = _append
+
+foreign import jscript "%1.append(%*)"
+  _append :: JQuery -> JQuery -> IO ()
+
+
+-------------------------------------------------------------------------------
+-- Dynamic loading
+
+loadSrcFile :: String -> IO ()
+loadSrcFile src = do let src' = toJS src :: JSString
+                     scriptTag <- jQuery "<script>"
+                     scriptTag' <- setAttr "src" src' scriptTag
+                     body <- jQuery "body"
+                     append body scriptTag'

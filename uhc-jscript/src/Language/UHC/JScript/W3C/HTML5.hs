@@ -51,6 +51,7 @@ module Language.UHC.JScript.W3C.HTML5
   )
   where
 
+import Language.UHC.JScript.Primitives
 import Language.UHC.JScript.ECMA.Array
 import Language.UHC.JScript.ECMA.String
 
@@ -86,6 +87,9 @@ foreign import jscript "%1.getElementsByName(%*)"
 
 foreign import jscript "%1.getElementsByTagName(%*)"
   documentGetElementsByTagName :: Document -> JSString -> IO (NodeList Node)
+  
+foreign import jscript "%1.createElement(%*)"
+  documentCreateElement :: Document -> JSString -> IO Node
 
 data AnchorPtr
 type Anchor = JSPtr AnchorPtr
