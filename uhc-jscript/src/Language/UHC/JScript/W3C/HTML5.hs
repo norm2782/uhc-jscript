@@ -7,6 +7,7 @@ module Language.UHC.JScript.W3C.HTML5
   , document
   , documentWriteln, documentWrite
   , documentGetElementById, documentGetElementsByName, documentGetElementsByTagName
+  , documentCreateElement
 
   , Anchor
   , anchorCharset
@@ -30,6 +31,7 @@ module Language.UHC.JScript.W3C.HTML5
   , elementClientWidth
   , elementClientHeight
   , elementAttributes
+  , elementSetAttribute
 
   , Attr
   , attrValue
@@ -50,6 +52,8 @@ module Language.UHC.JScript.W3C.HTML5
   , nodeListLength
   )
   where
+
+import Language.UHC.JScript.Types (toJS)
 
 import Language.UHC.JScript.Primitives
 import Language.UHC.JScript.ECMA.Array
@@ -88,8 +92,11 @@ foreign import jscript "%1.getElementsByName(%*)"
 foreign import jscript "%1.getElementsByTagName(%*)"
   documentGetElementsByTagName :: Document -> JSString -> IO (NodeList Node)
   
+documentCreateElement :: Document -> String -> IO Node
+documentCreateElement d elem = _documentCreateElement d (toJS elem)
+  
 foreign import jscript "%1.createElement(%*)"
-  documentCreateElement :: Document -> JSString -> IO Node
+  _documentCreateElement :: Document -> JSString -> IO Node
 
 data AnchorPtr
 type Anchor = JSPtr AnchorPtr
@@ -147,6 +154,12 @@ foreign import jscript "%1.clientHeight"
 
 foreign import jscript "%1.attributes"
   elementAttributes :: Node -> NamedNodeMap Node
+  
+elementSetAttribute :: Node -> String -> String -> IO ()
+elementSetAttribute n k v = _elementSetAttribute n (toJS k) (toJS v)  
+  
+foreign import jscript "%1.setAttribute(%*)"
+  _elementSetAttribute :: Node -> JSString -> JSString -> IO ()
 
 data NodePtr
 type Node = JSPtr NodePtr

@@ -155,11 +155,10 @@ keypress = undefined
 
 
 onDocumentReady :: JSFunPtr (IO ()) -> IO ()
-onDocumentReady f = do document <- jQuery "document"
-                       _ready document f
+onDocumentReady f = _ready f
 
-foreign import jscript "%1.ready(%2)"
-  _ready :: JQuery -> JSFunPtr (IO ()) -> IO ()
+foreign import jscript "$('document').ready(%1)"
+  _ready :: JSFunPtr (IO ()) -> IO ()
   
 -------------------------------------------------------------------------------
 -- DOM Manipulation
