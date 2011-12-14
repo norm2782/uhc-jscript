@@ -32,7 +32,8 @@ module Language.UHC.JScript.W3C.HTML5
   , elementClientHeight
   , elementAttributes
   , elementSetAttribute
-
+  , elementAppendChild
+  
   , Attr
   , attrValue
 
@@ -53,7 +54,7 @@ module Language.UHC.JScript.W3C.HTML5
   )
   where
 
-import Language.UHC.JScript.Types (toJS)
+import Language.UHC.JScript.Types
 
 import Language.UHC.JScript.Primitives
 import Language.UHC.JScript.ECMA.Array
@@ -89,14 +90,17 @@ foreign import jscript "%1.getElementById(%*)"
 foreign import jscript "%1.getElementsByName(%*)"
   documentGetElementsByName :: Document -> JSString -> IO (NodeList Node)
 
+documentGetElementsByTagName :: Document -> String -> IO (NodeList Node)
+documentGetElementsByTagName d = _documentGetElementsByTagName d . stringToJSString
+
 foreign import jscript "%1.getElementsByTagName(%*)"
-  documentGetElementsByTagName :: Document -> JSString -> IO (NodeList Node)
+  _documentGetElementsByTagName :: Document -> JSString -> IO (NodeList Node)
   
-documentCreateElement :: Document -> String -> IO Node
-documentCreateElement d elem = _documentCreateElement d (toJS elem)
+documentCreateElement :: String -> IO Node
+documentCreateElement elem = _documentCreateElement (stringToJSString elem :: JSString)
   
-foreign import jscript "%1.createElement(%*)"
-  _documentCreateElement :: Document -> JSString -> IO Node
+foreign import jscript "document.createElement(%*)"
+  _documentCreateElement :: JSString -> IO Node
 
 data AnchorPtr
 type Anchor = JSPtr AnchorPtr
@@ -156,10 +160,13 @@ foreign import jscript "%1.attributes"
   elementAttributes :: Node -> NamedNodeMap Node
   
 elementSetAttribute :: Node -> String -> String -> IO ()
-elementSetAttribute n k v = _elementSetAttribute n (toJS k) (toJS v)  
+elementSetAttribute n k v = _elementSetAttribute n (stringToJSString k :: JSString) (stringToJSString v :: JSString)  
   
 foreign import jscript "%1.setAttribute(%*)"
   _elementSetAttribute :: Node -> JSString -> JSString -> IO ()
+  
+foreign import jscript "%1.appendChild(%2)"
+  elementAppendChild :: Node -> Node -> IO ()
 
 data NodePtr
 type Node = JSPtr NodePtr
