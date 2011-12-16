@@ -132,8 +132,7 @@ type JUIEventHandler = JSFunPtr ( JQuery -> JUI -> JEventResult )
 type JEventType      = String
 
 bind :: JQuery -> JEventType -> JEventHandler -> IO ()
-bind jq event eh = do alert "Executing bind!"
-                      _bind jq (toJS event) eh
+bind jq event eh = do _bind jq (toJS event) eh
 
 foreign import jscript "%1.bind(%*)"
   _bind :: JQuery -> JSString -> JEventHandler -> IO ()

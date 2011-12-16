@@ -1,8 +1,13 @@
 module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), ajax, toJSOptions) where
 
-import Language.UHC.JScript.Types
+import Language.UHC.JScript.ECMA.String
+-- import Language.UHC.JScript.Types
 
 import Language.UHC.JScript.Primitives  
+
+
+toJS :: String -> JSString
+toJS = stringToJSString
   
 data AjaxOptions a = AjaxOptions {
   ao_url         :: String,
