@@ -1,33 +1,37 @@
 module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), ajax, toJSOptions) where
 
 import Language.UHC.JScript.ECMA.String
--- import Language.UHC.JScript.Types
+import Language.UHC.JScript.Types
 
 import Language.UHC.JScript.Primitives  
 
+import Data.List
 
-toJS :: String -> JSString
-toJS = stringToJSString
   
 data AjaxOptions a = AjaxOptions {
   ao_url         :: String,
   ao_requestType :: String,
   ao_contentType :: String,
   ao_dataType    :: String,
-  ao_success     :: JSFunPtr (a -> IO()),
-  ao_failure     :: JSFunPtr (a -> IO())
-  
+  ao_success     :: JSFunPtr (JSPtr a -> IO()),
+  ao_failure     :: JSFunPtr (JSPtr a -> IO())  
 }
+
 
 data JSAjaxOptions a = JSAjaxOptions {
   jsao_url         :: JSString,
   jsao_requestType :: JSString,
   jsao_contentType :: JSString,
   jsao_dataType    :: JSString,
-  jsao_success     :: JSFunPtr (a -> IO()),
-  jsao_failure     :: JSFunPtr (a -> IO())
-  
+  jsao_success     :: JSFunPtr (JSPtr a -> IO()),
+  jsao_failure     :: JSFunPtr (JSPtr a -> IO())
 }
+
+instance Show (AjaxOptions a) where
+  show jsopt= "AjaxOptions: " ++ intercalate " " [show $ ao_url jsopt]
+
+instance Show (JSAjaxOptions a) where
+  show jsopt = "JSAjaxOptions: " ++ intercalate " " [show $ jsao_url jsopt]
 
 toJSOptions :: AjaxOptions a -> JSAjaxOptions a
 toJSOptions options = let url'         = toJS (ao_url         options)
