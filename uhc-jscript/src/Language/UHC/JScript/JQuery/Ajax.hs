@@ -1,4 +1,4 @@
-module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), ajax, toJSOptions) where
+module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), AjaxCallback, ajaxBackend, ajax, toJSOptions) where
 
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Types
@@ -7,48 +7,52 @@ import Language.UHC.JScript.Primitives
 
 import Data.List
 
+type AjaxCallback a = JSFunPtr (JSPtr a -> IO())
   
 data AjaxOptions a = AjaxOptions {
   ao_url         :: String,
   ao_requestType :: String,
   ao_contentType :: String,
-  ao_dataType    :: String,
-  ao_success     :: JSFunPtr (JSPtr a -> IO()),
-  ao_failure     :: JSFunPtr (JSPtr a -> IO())  
+  ao_dataType    :: String
 }
 
 
 data JSAjaxOptions a = JSAjaxOptions {
-  jsao_url         :: JSString,
-  jsao_requestType :: JSString,
-  jsao_contentType :: JSString,
-  jsao_dataType    :: JSString,
-  jsao_success     :: JSFunPtr (JSPtr a -> IO()),
-  jsao_failure     :: JSFunPtr (JSPtr a -> IO())
+  url         :: JSString,
+  requestType :: JSString,
+  contentType :: JSString,
+  dataType    :: JSString
 }
 
 instance Show (AjaxOptions a) where
   show jsopt= "AjaxOptions: " ++ intercalate " " [show $ ao_url jsopt]
 
 instance Show (JSAjaxOptions a) where
-  show jsopt = "JSAjaxOptions: " ++ intercalate " " [show $ jsao_url jsopt]
+  show jsopt = "JSAjaxOptions: " ++ intercalate " " [show $ url jsopt]
 
 toJSOptions :: AjaxOptions a -> JSAjaxOptions a
 toJSOptions options = let url'         = toJS (ao_url         options)
                           requestType' = toJS (ao_requestType options)
                           contentType' = toJS (ao_contentType options)
                           dataType'    = toJS (ao_dataType    options)
-                      in JSAjaxOptions { jsao_url         = url' 
-                                       , jsao_requestType = requestType'
-                                       , jsao_contentType = contentType'
-                                       , jsao_dataType    = dataType'
-                                       , jsao_success     = ao_success options
-                                       , jsao_failure     = ao_failure options}
-                         
+                      in JSAjaxOptions { url         = url' 
+                                       , requestType = requestType'
+                                       , contentType = contentType'
+                                       , dataType    = dataType'
+                                       }
+                       
 
-ajax :: AjaxOptions a -> IO ()
-ajax options = do o <- mkObj (toJSOptions options)
-                  _ajax o
+ajaxBackend :: (JSPtr a -> IO ()) -> AjaxOptions a -> AjaxCallback a -> AjaxCallback a -> IO ()
+ajaxBackend cont options onSuccess onFailure = 
+  do let jsOptions = toJSOptions options
+     o <- mkObj jsOptions
+     _ <- setAttr "type"    (requestType jsOptions) o
+     _ <- setAttr "success" onSuccess               o
+     _ <- setAttr "error"   onFailure               o
+     _ajax o
+
+ajax :: AjaxOptions a -> AjaxCallback a -> AjaxCallback a -> IO ()
+ajax = ajaxBackend _ajax
                   
                   
                   
