@@ -1,4 +1,4 @@
-module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), AjaxCallback, Callback, AjaxRequestType(..), ajaxBackend, ajax, toJSOptions, mkJSAjaxCallback) where
+module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), AjaxCallback, AjaxRequestType(..), ajaxBackend, ajax, toJSOptions, mkJSAjaxCallback) where
 
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Types
@@ -8,8 +8,7 @@ import Language.UHC.JScript.Primitives
 import Data.List
 
 
-type Callback a b = JSPtr a -> String -> JSPtr b -> IO()
-type AjaxCallback a   b = JSPtr a -> String -> JSPtr b -> IO()
+type AjaxCallback   a b = JSPtr a -> String -> JSPtr b -> IO()
 type JSAjaxCallback a b = JSFunPtr (AjaxCallback a b)
 
 data AjaxRequestType = GET | POST

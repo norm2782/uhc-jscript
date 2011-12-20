@@ -78,20 +78,25 @@ foreign import jscript "%1.html()"
 setHTML :: JQuery -> String -> IO ()
 setHTML j s = _setHTML j (toJS s)
 
+
 foreign import jscript "%1.html(%2)"
   _setHTML :: JQuery -> JSString -> IO ()
-
+  
 foreign import jscript "%1.hide()"
   hide :: JQuery -> IO ()
 
 addClass :: JQuery -> String -> IO ()
 addClass j s = _addClass j (toJS s)
 
+wrapInner :: JQuery -> String -> IO ()
+wrapInner j = _wrapInner j . toJS
+
+foreign import jscript "%1.wrapInner(%2)"
+  _wrapInner :: JQuery -> JSString -> IO ()
+
  -- Or return JQuery for chaining??? Does chaining even make sense?
 foreign import jscript "%1.addClass(%2)"
   _addClass :: JQuery -> JSString -> IO ()
-
-
 
 -------------------------------------------------------------------------------
 -- Effects
