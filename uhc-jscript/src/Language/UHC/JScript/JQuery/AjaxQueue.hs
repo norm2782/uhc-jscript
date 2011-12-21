@@ -8,7 +8,7 @@ import Language.UHC.JScript.JQuery.Ajax
 
 import Language.UHC.JScript.Assorted (alert, _alert)
   
-ajaxQ  :: String -> AjaxOptions a -> AjaxCallback a b -> AjaxCallback a b -> IO ()
+ajaxQ  :: String -> AjaxOptions a -> AjaxCallback -> AjaxCallback -> IO ()
 ajaxQ queuename = ajaxBackend (_ajaxQ $ toJS queuename)
   
 foreign import jscript "$.ajaxq(%*)"

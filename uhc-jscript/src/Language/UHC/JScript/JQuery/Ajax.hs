@@ -8,8 +8,8 @@ import Language.UHC.JScript.Primitives
 import Data.List
 
 
-type AjaxCallback   a b = JSPtr a -> String -> JSPtr b -> IO()
-type JSAjaxCallback a b = JSFunPtr (AjaxCallback a b)
+type AjaxCallback   = forall a b. JS a => a -> String -> JSPtr b -> IO()
+type JSAjaxCallback = JSFunPtr (AjaxCallback)
 
 data AjaxRequestType = GET | POST
   deriving Show
@@ -48,7 +48,7 @@ toJSOptions options = let url'         = toJS (ao_url         options)
                                        }
                        
 
-ajaxBackend :: (JSPtr a -> IO ()) -> AjaxOptions a -> AjaxCallback a b -> AjaxCallback a b -> IO ()
+ajaxBackend :: (JSPtr a -> IO ()) -> AjaxOptions a -> AjaxCallback -> AjaxCallback -> IO ()
 ajaxBackend cont options onSuccess onFailure = 
   do let jsOptions = toJSOptions options
      onSuccess' <- mkJSAjaxCallback onSuccess
@@ -59,13 +59,13 @@ ajaxBackend cont options onSuccess onFailure =
      _ <- setAttr "error"   onFailure'               o
      _ajaxQ (toJS "jcu_app") o
 
-ajax :: AjaxOptions a -> AjaxCallback a b -> AjaxCallback a b -> IO ()
+ajax :: AjaxOptions a -> AjaxCallback -> AjaxCallback -> IO ()
 ajax = ajaxBackend _ajax
                   
                   
 
 foreign import jscript "wrapper"
-  mkJSAjaxCallback :: AjaxCallback a b -> IO (JSAjaxCallback a b)
+  mkJSAjaxCallback :: AjaxCallback -> IO (JSAjaxCallback)
 
 
 foreign import jscript "$.ajax(%1)"
