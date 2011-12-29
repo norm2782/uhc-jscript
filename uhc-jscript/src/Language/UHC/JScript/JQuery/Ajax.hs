@@ -11,7 +11,8 @@ data JQXHRPtr
 type JQXHR = JSPtr JQXHRPtr
 
 
-type AjaxCallback   r = JS r => r -> String -> JQXHR -> IO()
+-- type AjaxCallback   r = JS r => r -> String -> JQXHR -> IO()
+type AjaxCallback   r = r -> String -> JQXHR -> IO()
 type JSAjaxCallback r = JSFunPtr (AjaxCallback r)
 
 data AjaxRequestType = GET | POST

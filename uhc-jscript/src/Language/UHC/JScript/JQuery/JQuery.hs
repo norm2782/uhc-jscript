@@ -51,7 +51,19 @@ foreign import jscript "jQuery.when(%*)"
 
 foreign import jscript "jQuery.when(%*)"
   when'' :: JSPtr a -> JSPtr a -> JSPtr a -> IO ()
+
+-------------------------------------------------------------------------------
+-- DOM
+
+foreign import jscript "%1.each(%2)"
+  each :: JQuery -> JSFunPtr (Int -> JSPtr a -> IO ()) -> IO ()
+
+foreign import jscript "jQuery.each(%*)"
+  each' ::  b -> JSFunPtr (Int -> JSPtr a -> IO ()) -> IO ()
   
+
+foreign import jscript "wrapper"
+  mkEachIterator :: (Int -> JSPtr a -> IO ()) -> IO (JSFunPtr (Int -> JSPtr a -> IO ()))
   
 -------------------------------------------------------------------------------
 -- DOM
