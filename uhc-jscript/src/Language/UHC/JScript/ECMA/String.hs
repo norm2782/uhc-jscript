@@ -20,15 +20,6 @@ instance FromJS JSString String where
 jsStringToString :: JSString -> String
 jsStringToString = packedStringToString
 
-foreign import jscript "primPackedStringNull"
-  primPackedStringNull :: JSString -> Bool
-
-foreign import jscript "primPackedStringHead"
-  primPackedStringHead :: JSString -> Char
-
-foreign import jscript "primPackedStringTail"
-  primPackedStringTail :: JSString -> JSString
-
 foreign import jscript "String.fromCharCode(%*)"
   fromCharCode :: Int -> JSString
 
