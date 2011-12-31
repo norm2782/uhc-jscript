@@ -4,6 +4,8 @@ import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives
 import Language.UHC.JScript.Types
 
+import Language.UHC.JScript.Assorted (alert)
+
 data JQueryPtr
 type JQuery = JSPtr JQueryPtr
 
@@ -50,6 +52,30 @@ foreign import jscript "jQuery.when(%*)"
 foreign import jscript "jQuery.when(%*)"
   when'' :: JSPtr a -> JSPtr a -> JSPtr a -> IO ()
 
+-------------------------------------------------------------------------------
+-- DOM
+
+foreign import jscript "%1.each(%2)"
+  each :: JQuery -> JSFunPtr (Int -> JSPtr a -> IO ()) -> IO ()
+
+foreign import jscript "jQuery.each(%*)"
+  each' ::  b -> JSFunPtr (Int -> JSPtr a -> IO ()) -> IO ()
+  
+
+foreign import jscript "wrapper"
+  mkEachIterator :: (Int -> JSPtr a -> IO ()) -> IO (JSFunPtr (Int -> JSPtr a -> IO ()))
+  
+-------------------------------------------------------------------------------
+-- DOM
+
+findSelector :: JQuery -> String -> IO JQuery
+findSelector jq = findSelector' jq . toJS
+
+foreign import jscript "%1.find(%2)"
+  findSelector' :: JQuery -> JSString -> IO JQuery
+
+foreign import jscript "%1.find(%2)"
+  findObject :: JQuery -> JQuery -> IO JQuery
 
 -------------------------------------------------------------------------------
 -- Manipulation
@@ -64,20 +90,25 @@ foreign import jscript "%1.html()"
 setHTML :: JQuery -> String -> IO ()
 setHTML j s = _setHTML j (toJS s)
 
+
 foreign import jscript "%1.html(%2)"
   _setHTML :: JQuery -> JSString -> IO ()
-
+  
 foreign import jscript "%1.hide()"
   hide :: JQuery -> IO ()
 
 addClass :: JQuery -> String -> IO ()
 addClass j s = _addClass j (toJS s)
 
+wrapInner :: JQuery -> String -> IO ()
+wrapInner j = _wrapInner j . toJS
+
+foreign import jscript "%1.wrapInner(%2)"
+  _wrapInner :: JQuery -> JSString -> IO ()
+
  -- Or return JQuery for chaining??? Does chaining even make sense?
 foreign import jscript "%1.addClass(%2)"
   _addClass :: JQuery -> JSString -> IO ()
-
-
 
 -------------------------------------------------------------------------------
 -- Effects
@@ -105,3 +136,62 @@ jqshow j (Just n) (Just e) Nothing  = jqshow2  j n (toJS e)
 jqshow j (Just n) Nothing  (Just c) = jqshow2' j n c
 jqshow j (Just n) (Just e) (Just c) = jqshow3  j n (toJS e) c
 
+
+-------------------------------------------------------------------------------
+-- Events
+
+data JUIPtr
+type JUI = JSPtr JUIPtr
+
+type JEventResult    = IO Bool
+type JEventHandler   = JSFunPtr ( JQuery -> JEventResult )
+type JUIEventHandler = JSFunPtr ( JQuery -> JUI -> JEventResult )
+type JEventType      = String
+
+bind :: JQuery -> JEventType -> JEventHandler -> IO ()
+bind jq event eh = do _bind jq (toJS event) eh
+
+foreign import jscript "%1.bind(%*)"
+  _bind :: JQuery -> JSString -> JEventHandler -> IO ()
+
+
+blur :: JQuery -> JEventHandler -> IO ()
+blur = undefined
+
+
+click :: JQuery -> JEventHandler -> IO ()
+click = _click
+
+foreign import jscript "%1.click(%2)"
+  _click :: JQuery -> JEventHandler -> IO ()
+
+
+keypress :: JQuery -> JEventHandler -> IO ()
+keypress = undefined
+
+
+onDocumentReady :: JSFunPtr (IO ()) -> IO ()
+onDocumentReady f = _ready f
+
+foreign import jscript "$('document').ready(%1)"
+  _ready :: JSFunPtr (IO ()) -> IO ()
+  
+-------------------------------------------------------------------------------
+-- DOM Manipulation
+
+append :: JQuery -> JQuery -> IO ()
+append = _append
+
+foreign import jscript "%1.append(%*)"
+  _append :: JQuery -> JQuery -> IO ()
+
+
+-------------------------------------------------------------------------------
+-- Dynamic loading
+
+loadSrcFile :: String -> IO ()
+loadSrcFile src = do let src' = toJS src :: JSString
+                     scriptTag <- jQuery "<script>"
+                     scriptTag' <- setAttr "src" src' scriptTag
+                     body <- jQuery "body"
+                     append body scriptTag'

@@ -7,6 +7,9 @@ import UHC.Ptr
 data JSPtr a
 type JSFunPtr a = FunPtr a
 
+instance JS (JSPtr a)
+instance JS (JSString)
+
 type JSString = PackedString
 type AnonObj = JSPtr ()
 

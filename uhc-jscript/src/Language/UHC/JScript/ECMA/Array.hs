@@ -9,6 +9,8 @@ import UHC.BoxArray
 
 type JSArray x = BoxArray x
 
+instance JS (JSArray a)
+
 foreign import jscript "%1.length"
   lengthJSArray :: JSArray x -> Int
 
