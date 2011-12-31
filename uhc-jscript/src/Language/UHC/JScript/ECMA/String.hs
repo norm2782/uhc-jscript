@@ -3,6 +3,7 @@
 module Language.UHC.JScript.ECMA.String where
 
 import Language.UHC.JScript.Types
+import UHC.Base (packedStringToString)
 
 type JSString = PackedString
 
@@ -17,10 +18,7 @@ instance FromJS JSString String where
 
 
 jsStringToString :: JSString -> String
-jsStringToString str
-  | primPackedStringNull str  =  []
-  | otherwise                 =  primPackedStringHead str
-                              :  jsStringToString (primPackedStringTail str)
+jsStringToString = packedStringToString
 
 foreign import jscript "primPackedStringNull"
   primPackedStringNull :: JSString -> Bool
