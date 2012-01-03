@@ -137,15 +137,24 @@ jqshow j (Just n) Nothing  (Just c) = jqshow2' j n c
 jqshow j (Just n) (Just e) (Just c) = jqshow3  j n (toJS e) c
 
 
+foreign import jscript "%1.blur()"
+  doBlur :: JQuery -> IO ()
+
 -------------------------------------------------------------------------------
 -- Events
 
 data JUIPtr
 type JUI = JSPtr JUIPtr
 
+type EventHandler    = JQuery -> JEventResult
+type UIEventHandler  = JQuery -> JUI -> JEventResult -- TODO: Split this off to JQueryUI or something :)
+
+
 type JEventResult    = IO Bool
-type JEventHandler   = JSFunPtr ( JQuery -> JEventResult )
-type JUIEventHandler = JSFunPtr ( JQuery -> JUI -> JEventResult )
+
+type JEventHandler   = JSFunPtr EventHandler
+type JUIEventHandler = JSFunPtr UIEventHandler
+
 type JEventType      = String
 
 bind :: JQuery -> JEventType -> JEventHandler -> IO ()
@@ -176,11 +185,21 @@ onDocumentReady f = _ready f
 foreign import jscript "$('document').ready(%1)"
   _ready :: JSFunPtr (IO ()) -> IO ()
   
+foreign import jscript "wrapper"
+  mkJEventHandler :: EventHandler -> IO JEventHandler
+  
+foreign import jscript "wrapper"
+  mkJUIEventHandler :: UIEventHandler -> IO JUIEventHandler
+  
 -------------------------------------------------------------------------------
 -- DOM Manipulation
 
 append :: JQuery -> JQuery -> IO ()
 append = _append
+
+appendString :: JQuery -> String -> IO ()
+appendString jq str = do jq' <- jQuery str
+                         _append jq jq'
 
 foreign import jscript "%1.append(%*)"
   _append :: JQuery -> JQuery -> IO ()
