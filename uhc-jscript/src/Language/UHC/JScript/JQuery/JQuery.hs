@@ -77,6 +77,10 @@ foreign import jscript "%1.find(%2)"
 foreign import jscript "%1.find(%2)"
   findObject :: JQuery -> JQuery -> IO JQuery
 
+foreign import jscript "%1.val()"  
+  valString :: JQuery -> IO JSString
+
+
 -------------------------------------------------------------------------------
 -- Manipulation
 
@@ -146,16 +150,16 @@ foreign import jscript "%1.blur()"
 data JUIPtr
 type JUI = JSPtr JUIPtr
 
-type EventHandler    = JQuery -> JEventResult
-type UIEventHandler  = JQuery -> JUI -> JEventResult -- TODO: Split this off to JQueryUI or something :)
+type EventHandler        = JQuery -> JEventResult
+type UIEventHandler      = JQuery -> JUI -> JEventResult -- TODO: Split this off to JQueryUI or something :)
+type UIThisEventHandler  = JQuery -> JQuery -> JUI -> JEventResult 
 
+type JEventResult        = IO Bool
 
-type JEventResult    = IO Bool
-
-type JEventHandler   = JSFunPtr EventHandler
-type JUIEventHandler = JSFunPtr UIEventHandler
-
-type JEventType      = String
+type JEventHandler       = JSFunPtr EventHandler
+type JUIEventHandler     = JSFunPtr UIEventHandler
+type JUIThisEventHandler = JSFunPtr UIThisEventHandler
+type JEventType          = String
 
 bind :: JQuery -> JEventType -> JEventHandler -> IO ()
 bind jq event eh = do _bind jq (toJS event) eh
@@ -190,6 +194,13 @@ foreign import jscript "wrapper"
   
 foreign import jscript "wrapper"
   mkJUIEventHandler :: UIEventHandler -> IO JUIEventHandler
+  
+foreign import jscript "wrapper"
+  mkJUIThisEventHandler :: UIThisEventHandler -> IO JUIThisEventHandler
+  
+  
+foreign import jscript "wrappedJQueryUIEvent(%1)"
+  wrappedJQueryUIEvent :: JUIThisEventHandler -> IO JUIEventHandler
   
 -------------------------------------------------------------------------------
 -- DOM Manipulation

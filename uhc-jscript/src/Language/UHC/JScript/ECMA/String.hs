@@ -115,7 +115,7 @@ foreign import jscript "%1.toLocaleUpperCase()"
 foreign import jscript "%1.trim()"
   trim :: JSString -> JSString
 
-foreign import jscript "%1.lenght"
+foreign import jscript "%1.length"
   length :: JSString -> Int
 
 foreign import prim "primStringToPackedString"
