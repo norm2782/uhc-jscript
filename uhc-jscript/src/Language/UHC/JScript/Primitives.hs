@@ -41,14 +41,17 @@ setCtor s1 fp = _setCtor (toJS s1) fp
 foreign import prim "primSetCtor"
   _setCtor :: JSString -> JSFunPtr a -> IO ()
 
-getAttr :: String -> JSPtr p -> a
+getAttr :: String -> JSPtr p -> IO a
 getAttr s p = _getAttr (toJS s) p
 
 foreign import prim "primGetAttr"
-  _getAttr :: JSString -> JSPtr p -> a
+  _getAttr :: JSString -> JSPtr p -> IO a
 
 setAttr :: String -> a -> JSPtr p -> IO (JSPtr p)
 setAttr s a p = _setAttr (toJS s) a p
+
+setAttr_ :: String -> a -> JSPtr p -> IO ()
+setAttr_ s a p = setAttr s a p >> return ()
 
 foreign import prim "primSetAttr"
   _setAttr :: JSString -> a -> JSPtr p -> IO (JSPtr p)
