@@ -65,6 +65,9 @@ foreign import prim "primPureSetAttr"
 modAttr :: String -> (a -> b) -> JSPtr p -> IO (JSPtr p)
 modAttr s f p = _modAttr (toJS s) f p
 
+modAttr_ :: String -> (a -> b) -> JSPtr p -> IO ()
+modAttr_ s f p = modAttr s f p >> return ()
+
 foreign import prim "primModAttr"
   _modAttr :: JSString -> (a -> b) -> JSPtr p -> IO (JSPtr p)
 
