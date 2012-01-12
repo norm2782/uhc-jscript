@@ -52,7 +52,7 @@ toJSOptions options = let url'         = toJS (ao_url         options)
                                        }
                        
 
-ajaxBackend :: (JS r, JS v) => (JSPtr a -> IO ()) -> AjaxOptions a -> v -> AjaxCallback r -> AjaxCallback r -> IO ()
+ajaxBackend :: (JS r) => (JSPtr a -> IO ()) -> AjaxOptions a -> v -> AjaxCallback r -> AjaxCallback r -> IO ()
 ajaxBackend cont options valdata onSuccess onFailure = 
   do let jsOptions = toJSOptions options
      onSuccess' <- mkJSAjaxCallback onSuccess
@@ -64,7 +64,7 @@ ajaxBackend cont options valdata onSuccess onFailure =
      _ <- setAttr "data"    valdata                 o
      _ajaxQ (toJS "jcu_app") o
 
-ajax :: (JS r, JS v) => AjaxOptions a -> v -> AjaxCallback r -> AjaxCallback r -> IO ()
+ajax :: (JS r) => AjaxOptions a -> v -> AjaxCallback r -> AjaxCallback r -> IO ()
 ajax = ajaxBackend _ajax
                   
                   
