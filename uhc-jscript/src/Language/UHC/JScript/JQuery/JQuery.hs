@@ -215,6 +215,14 @@ appendString jq str = do jq' <- jQuery str
 foreign import jscript "%1.append(%*)"
   _append :: JQuery -> JQuery -> IO ()
 
+replaceWith :: JQuery -> JQuery -> IO ()
+replaceWith = _replaceWith
+
+foreign import jscript "%1.replaceWith(%2)"
+  _replaceWith :: JQuery -> JQuery -> IO ()
+  
+replaceWithString :: JQuery -> String -> IO ()
+replaceWithString jq s = jQuery s >>= replaceWith jq
 
 -------------------------------------------------------------------------------
 -- Dynamic loading
