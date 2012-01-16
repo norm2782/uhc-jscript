@@ -4,7 +4,12 @@ module Language.UHC.JScript.Types where
 
 import Control.Monad
 
+
+
 class JS a where
+  
+instance JS ()
+instance JS Int
 
 
 class ToJS a b where

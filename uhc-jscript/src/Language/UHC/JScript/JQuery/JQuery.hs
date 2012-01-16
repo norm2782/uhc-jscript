@@ -113,6 +113,9 @@ foreign import jscript "%1.wrapInner(%2)"
  -- Or return JQuery for chaining??? Does chaining even make sense?
 foreign import jscript "%1.addClass(%2)"
   _addClass :: JQuery -> JSString -> IO ()
+  
+foreign import jscript "%1.remove()"
+  remove :: JQuery -> IO ()
 
 -------------------------------------------------------------------------------
 -- Effects
