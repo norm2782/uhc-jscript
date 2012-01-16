@@ -150,19 +150,28 @@ foreign import jscript "%1.blur()"
 data JUIPtr
 type JUI = JSPtr JUIPtr
 
+-- ToDo:  Probably the second arguments of the ThisEventHandlers and the first
+--        of the EventHandlers should not be a general JQuery object but an
+--        `eventObject'.
+--        Also I probably should deprecate the versions without this as you'll
+--        almost never have use of them...
+
 type EventHandler        = JQuery -> JEventResult
+type ThisEventHandler    = JQuery -> JQuery -> JEventResult 
 type UIEventHandler      = JQuery -> JUI -> JEventResult -- TODO: Split this off to JQueryUI or something :)
 type UIThisEventHandler  = JQuery -> JQuery -> JUI -> JEventResult 
 
 type JEventResult        = IO Bool
 
 type JEventHandler       = JSFunPtr EventHandler
+type JThisEventHandler   = JSFunPtr ThisEventHandler
 type JUIEventHandler     = JSFunPtr UIEventHandler
 type JUIThisEventHandler = JSFunPtr UIThisEventHandler
 type JEventType          = String
 
-bind :: JQuery -> JEventType -> JEventHandler -> IO ()
-bind jq event eh = do _bind jq (toJS event) eh
+bind :: JQuery -> JEventType -> EventHandler -> IO ()
+bind jq event eh = do handler <- mkJEventHandler eh
+                      _bind jq (toJS event) handler
 
 foreign import jscript "%1.bind(%*)"
   _bind :: JQuery -> JSString -> JEventHandler -> IO ()
@@ -172,8 +181,8 @@ blur :: JQuery -> JEventHandler -> IO ()
 blur = undefined
 
 
-click :: JQuery -> JEventHandler -> IO ()
-click = _click
+click :: JQuery -> EventHandler -> IO ()
+click jq eh = mkJEventHandler eh >>= _click jq
 
 foreign import jscript "%1.click(%2)"
   _click :: JQuery -> JEventHandler -> IO ()
@@ -191,6 +200,14 @@ foreign import jscript "$('document').ready(%1)"
   
 foreign import jscript "wrapper"
   mkJEventHandler :: EventHandler -> IO JEventHandler
+  
+  
+foreign import jscript "wrapper"
+  mkJThisEventHandler :: ThisEventHandler -> IO JThisEventHandler
+  
+foreign import jscript "wrappedJQueryEvent(%1)"
+  wrappedJQueryEvent :: JThisEventHandler -> IO JEventHandler
+  
   
 foreign import jscript "wrapper"
   mkJUIEventHandler :: UIEventHandler -> IO JUIEventHandler
