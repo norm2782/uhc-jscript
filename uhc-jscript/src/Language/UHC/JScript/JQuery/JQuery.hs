@@ -121,6 +121,27 @@ foreign import jscript "%1.addClass(%2)"
 foreign import jscript "%1.remove()"
   remove :: JQuery -> IO ()
 
+toggleClass :: JQuery -> String -> IO ()
+toggleClass jq = _toggleClass jq . toJS
+
+toggleClassString :: String -> String -> IO ()
+toggleClassString sel c = jQuery sel >>= flip toggleClass c
+
+foreign import jscript "%1.toggleClass(%2)"
+  _toggleClass :: JQuery -> JSString -> IO ()
+  
+-- | One or more space-separated classes to be removed from the class attribute
+--   of each matched element.
+removeClass :: JQuery -> String -> IO ()
+removeClass jq = _removeClass jq . toJS
+
+removeClassString :: String -> String -> IO ()
+removeClassString sel c = jQuery sel >>= flip removeClass c
+
+foreign import jscript "%1.removeClass(%2)"
+  _removeClass :: JQuery -> JSString -> IO ()
+
+
 -------------------------------------------------------------------------------
 -- Effects
 
