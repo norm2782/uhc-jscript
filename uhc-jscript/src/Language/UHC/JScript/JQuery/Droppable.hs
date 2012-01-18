@@ -1,5 +1,6 @@
 module Language.UHC.JScript.JQuery.Droppable where
 
+import Language.UHC.JScript.Prelude
 import Language.UHC.JScript.ECMA.Bool
 
 import Language.UHC.JScript.Primitives
