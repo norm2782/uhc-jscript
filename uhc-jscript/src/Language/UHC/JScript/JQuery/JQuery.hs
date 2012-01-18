@@ -81,8 +81,11 @@ foreign import jscript "%1.find(%2)"
 foreign import jscript "%1.find(%2)"
   findObject :: JQuery -> JQuery -> IO JQuery
 
+valString :: JQuery -> IO String
+valString jq = valJSString jq >>= return . fromJS
+
 foreign import jscript "%1.val()"  
-  valString :: JQuery -> IO JSString
+  valJSString :: JQuery -> IO JSString
 
 
 -------------------------------------------------------------------------------
