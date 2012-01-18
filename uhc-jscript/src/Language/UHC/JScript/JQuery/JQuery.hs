@@ -231,23 +231,36 @@ foreign import jscript "$('document').ready(%1)"
   
 foreign import jscript "wrapper"
   mkJEventHandler :: EventHandler -> IO JEventHandler
-  
+    
   
 foreign import jscript "wrapper"
-  mkJThisEventHandler :: ThisEventHandler -> IO JThisEventHandler
+  _mkJThisEventHandler :: ThisEventHandler -> IO JThisEventHandler
   
-foreign import jscript "wrappedJQueryEvent(%1)"
+mkJThisEventHandler :: ThisEventHandler -> IO JThisEventHandler
+mkJThisEventHandler f = 
+  let g this jq = do  jQThis <- jQueryObj this :: IO JQuery
+                      f jQThis jq
+   in _mkJThisEventHandler g
+  
+foreign import jscript "wrappedThis(%1)"
   wrappedJQueryEvent :: JThisEventHandler -> IO JEventHandler
   
   
 foreign import jscript "wrapper"
   mkJUIEventHandler :: UIEventHandler -> IO JUIEventHandler
+ 
+ 
+mkJUIThisEventHandler :: UIThisEventHandler -> IO JUIThisEventHandler
+mkJUIThisEventHandler f = 
+  let g this jq ui = do  jQThis <- jQueryObj this :: IO JQuery
+                         f jQThis jq ui
+  in _mkJUIThisEventHandler g  
   
 foreign import jscript "wrapper"
-  mkJUIThisEventHandler :: UIThisEventHandler -> IO JUIThisEventHandler
+  _mkJUIThisEventHandler :: UIThisEventHandler -> IO JUIThisEventHandler
   
   
-foreign import jscript "wrappedJQueryUIEvent(%1)"
+foreign import jscript "wrappedThis(%1)"
   wrappedJQueryUIEvent :: JUIThisEventHandler -> IO JUIEventHandler
   
 -------------------------------------------------------------------------------
