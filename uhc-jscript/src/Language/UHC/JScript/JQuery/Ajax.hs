@@ -1,4 +1,4 @@
-module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), AjaxCallback, AjaxRequestType(..), ajaxBackend, ajax, toJSOptions, mkJSAjaxCallback) where
+module Language.UHC.JScript.JQuery.Ajax (AjaxOptions(..), JSAjaxOptions(..), AjaxCallback, AjaxRequestType(..), ajaxBackend, ajax, toJSOptions, mkJSAjaxCallback, noop) where
 
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Types
@@ -67,7 +67,6 @@ ajax :: (JS r, JS v) => AjaxOptions a -> v -> AjaxCallback r -> AjaxCallback r -
 ajax = ajaxBackend _ajax
                   
                   
-
 foreign import jscript "wrapper"
   mkJSAjaxCallback :: AjaxCallback r -> IO (JSAjaxCallback r)
 
@@ -77,3 +76,6 @@ foreign import jscript "$.ajax(%1)"
   
 foreign import jscript "$.ajaxq(%*)"
   _ajaxQ :: JSString -> JSPtr a -> IO ()  
+  
+noop :: AjaxCallback a
+noop _ _ _ = return ()  
