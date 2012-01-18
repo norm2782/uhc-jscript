@@ -1,5 +1,6 @@
 module Language.UHC.JScript.JQuery.JQuery where
 
+import Language.UHC.JScript.ECMA.Array (JSArray)
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives
 import Language.UHC.JScript.Types
@@ -53,7 +54,10 @@ foreign import jscript "jQuery.when(%*)"
   when'' :: JSPtr a -> JSPtr a -> JSPtr a -> IO ()
 
 -------------------------------------------------------------------------------
--- DOM
+-- Iteration
+
+foreign import jscript "jQuery.makeArray(%1)"
+  jQueryToArray :: JQuery -> IO (JSArray a)
 
 foreign import jscript "%1.each(%2)"
   each :: JQuery -> JSFunPtr (Int -> JSPtr a -> IO ()) -> IO ()
