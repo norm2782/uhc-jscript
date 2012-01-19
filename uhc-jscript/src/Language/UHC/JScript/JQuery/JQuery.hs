@@ -88,6 +88,12 @@ foreign import jscript "%1.val()"
   valJSString :: JQuery -> IO JSString
 
 
+setValString :: JQuery -> String -> IO ()
+setValString jq = _setValString jq . toJS
+
+foreign import jscript "%1.val(%2)"
+  _setValString :: JQuery -> JSString -> IO ()
+
 -------------------------------------------------------------------------------
 -- Manipulation
 
@@ -206,6 +212,12 @@ bind jq event eh = do handler <- mkJEventHandler eh
 
 foreign import jscript "%1.bind(%*)"
   _bind :: JQuery -> JSString -> JEventHandler -> IO ()
+  
+unbind :: JQuery -> JEventType -> IO ()
+unbind jq = _unbind jq . toJS
+
+foreign import jscript "%1.unbind(%*)"
+  _unbind :: JQuery -> JSString -> IO ()
 
 
 blur :: JQuery -> JEventHandler -> IO ()
