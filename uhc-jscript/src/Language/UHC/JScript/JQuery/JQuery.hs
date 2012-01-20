@@ -204,17 +204,47 @@ type JEventHandler       = JSFunPtr EventHandler
 type JThisEventHandler   = JSFunPtr ThisEventHandler
 type JUIEventHandler     = JSFunPtr UIEventHandler
 type JUIThisEventHandler = JSFunPtr UIThisEventHandler
-type JEventType          = String
+
+data JEventType          = Blur | Change | Click | DoubleClick | Focus | FocusIn
+                         | FocusOut | Hover | KeyDown  | KeyPress | KeyUp
+                         | MouseDown | MouseEnter | MouseLeave | MouseMove
+                         | MouseOut  | MouseOver  | MouseUp
+                         | Ready | Resize | Scroll | Select | Submit
+                         
+instance Show JEventType where
+  show Blur        = "blur"
+  show Change      = "change"
+  show Click       = "click"
+  show DoubleClick = "dblclick"
+  show Focus       = "focus"
+  show FocusIn     = "focusin"
+  show FocusOut    = "focusout"
+  show Hover       = "hover"
+  show KeyDown     = "keydown"
+  show KeyPress    = "keypress"
+  show KeyUp       = "keyup"
+  show MouseDown   = "mousedown"
+  show MouseEnter  = "mouseenter"
+  show MouseLeave  = "mouseleave"
+  show MouseMove   = "mousemove"
+  show MouseOut    = "mouseout"
+  show MouseOver   = "mouseover"
+  show MouseUp     = "mouseup"
+  show Ready       = "ready"
+  show Resize      = "resize"
+  show Scroll      = "scroll"
+  show Select      = "select"
+  show Submit      = "submit"
 
 bind :: JQuery -> JEventType -> EventHandler -> IO ()
 bind jq event eh = do handler <- mkJEventHandler eh
-                      _bind jq (toJS event) handler
+                      _bind jq ((toJS . show)event) handler
 
 foreign import jscript "%1.bind(%*)"
   _bind :: JQuery -> JSString -> JEventHandler -> IO ()
   
 unbind :: JQuery -> JEventType -> IO ()
-unbind jq = _unbind jq . toJS
+unbind jq = _unbind jq . toJS . show
 
 foreign import jscript "%1.unbind(%*)"
   _unbind :: JQuery -> JSString -> IO ()
