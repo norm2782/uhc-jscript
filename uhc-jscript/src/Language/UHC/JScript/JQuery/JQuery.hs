@@ -9,7 +9,7 @@ import Language.UHC.JScript.Assorted (alert)
 
 data JQueryPtr
 type JQuery = JSPtr JQueryPtr
-
+type Selector = String
 -------------------------------------------------------------------------------
 -- jQuery Core
 
@@ -242,6 +242,11 @@ bind jq event eh = do handler <- mkJEventHandler eh
 
 foreign import jscript "%1.bind(%*)"
   _bind :: JQuery -> JSString -> JEventHandler -> IO ()
+  
+registerEvents :: [(String, JEventType, EventHandler)] -> IO ()
+registerEvents = mapM_ (\ (e, event, eh) -> do elem <- jQuery e
+                                               unbind elem event
+                                               bind elem event eh)
   
 unbind :: JQuery -> JEventType -> IO ()
 unbind jq = _unbind jq . toJS . show
